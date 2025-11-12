@@ -1,0 +1,2 @@
+campaign_id,sheet_id,sheet_name,enabled,start_iso,end_iso,fields_json
+NDP_CAMPAIGN_01,PASTE_SHEET_ID_1,Responses,TRUE,2025-11-01,2025-12-31,"[\"crop_type\",\"acreage\"]"
