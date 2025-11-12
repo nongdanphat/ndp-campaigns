@@ -1,1 +1,27 @@
-
+{
+  "campaign_id": "C01",
+  "slug": "c01",
+  "title": "Hỗ trợ giống lúa mới 2025",
+  "description": "Đăng ký nhận giống lúa chất lượng cao miễn phí tại 10 tỉnh miền Bắc.<br><strong>Thời gian: 01/11 - 31/12/2025</strong>",
+  "image": "assets/images/c01-banner.jpg",
+  "start_date": "2025-11-01",
+  "end_date": "2025-12-31",
+  "active": true,
+  "sheet_id": "1aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890",
+  "extra_fields": [
+    {
+      "id": "acreage",
+      "label": "Diện tích canh tác (ha) *",
+      "type": "number",
+      "placeholder": "VD: 2.5",
+      "required": true
+    },
+    {
+      "id": "crop_type",
+      "label": "Loại cây trồng chính",
+      "type": "select",
+      "options": ["Lúa", "Ngô", "Rau", "Cây ăn quả"],
+      "required": false
+    }
+  ]
+}
