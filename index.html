@@ -58,16 +58,16 @@
     const slug = urlPath.split('/').filter(Boolean).pop() || 'c01';
 
     let config = null;
-    let adminData = null;
+    let administrativeUnitData = null;
 
     // === LOAD CONFIG + DATA ===
     Promise.all([
       fetch(`config/${slug}.json`).then(r => r.ok ? r.json() : Promise.reject('Not found')),
-      fetch('admin-data.json').then(r => r.json())
+      fetch('administrative-unit-data.json').then(r => r.json())
     ])
-    .then(([cfg, admin]) => {
+    .then(([cfg, administrativeUnit]) => {
       config = cfg;
-      adminData = admin;
+      administrativeUnitData = administrativeUnit;
 
       const now = new Date();
       const start = new Date(config.start_date);
