@@ -1,0 +1,141 @@
+{
+  "campaign_id": "chien-dich-mau",
+  "enabled": true,
+  
+  "config": {
+    "scriptUrl": "PASTE_YOUR_GAS_WEB_APP_URL_HERE",
+    "adminDataUrl": "../../shared/administrative-unit-data.json",
+    "zaloLinksUrl": "../../shared/unit_zalo_group.csv",
+    "allowMultipleSubmissions": true,
+    "showReferralInfo": true,
+    "showDeviceInfo": true,
+    "zalo": {
+      "enabled": true,
+      "title": "Tham gia nhóm Zalo",
+      "description": "Vui lòng tham gia nhóm Zalo để nhận được hỗ trợ tốt nhất."
+    }
+  },
+  
+  "metadata": {
+    "pageTitle": "NDP-Nông Dân Phát",
+    "heroTitle": "Tên chiến dịch",
+    "description": "Vui lòng điền thông tin chính xác để chúng tôi kết nối và hỗ trợ bạn tốt hơn.",
+    "image": "./assets/logo.png",
+    "background": "./assets/background.png",
+    "submitButtonText": "Gửi thông tin",
+    "newSubmitButtonText": "Gửi thông tin khác",
+    "disabledMessage": "Chiến dịch này hiện đang tắt.",
+    "copyright": "© 2025 NDP. Mọi quyền sở hữu và quyền liên quan được bảo lưu."
+  },
+  
+  "theme": {
+    "primaryColor": "#AB7E31",
+    "backgroundColor": "#f3f4f6",
+    "warningColor": "#ED3241",
+    "cardBorderRadius": "20px",
+    "backgroundHeight": "20rem",
+    "heroBorderRadius": "20px"
+  },
+  
+  "fields": {
+    "mandatory": {
+      "full_name": {
+        "label": "Họ và tên",
+        "type": "text",
+        "placeholder": "VD: Nguyễn Văn A",
+        "required": true
+      },
+      "phone": {
+        "label": "Số điện thoại",
+        "type": "tel",
+        "placeholder": "VD: 0912 345 678",
+        "required": true
+      },
+      "province": {
+        "label": "Tỉnh / Thành phố",
+        "type": "select",
+        "source": "administrative",
+        "required": true
+      },
+      "district": {
+        "label": "Huyện / Thị xã / TP trực thuộc",
+        "type": "select",
+        "source": "administrative",
+        "required": true
+      },
+      "ward": {
+        "label": "Xã / Phường / Thị trấn",
+        "type": "select",
+        "source": "administrative",
+        "required": true
+      },
+      "hamlet": {
+        "label": "Thôn / Ấp / Tổ dân phố",
+        "type": "text",
+        "placeholder": "VD: Thôn Phú Long / Ấp Tân Hiệp 2 / Tổ 5 KP 3",
+        "required": true
+      },
+      "address": {
+        "label": "Địa chỉ",
+        "type": "text",
+        "placeholder": "Số nhà, tên đường",
+        "required": true
+      }
+    },
+    "custom": [
+      {
+        "title": "Mẫu thông tin 1",
+        "fields": [
+          {
+            "id": "example_input_field",
+            "label": "Nhập thông tin mẫu",
+            "type": "text",
+            "placeholder": "VD: Nhập thông tin",
+            "required": false
+          },
+          {
+            "id": "example_checkbox",
+            "label": "Sở thích",
+            "type": "checkbox",
+            "required": true,
+            "options": [
+              "Đọc sách",
+              "Nghe nhạc",
+              "Xem phim",
+              "Du lịch"
+            ]
+          },
+          {
+            "id": "example_select",
+            "label": "Lựa chọn mẫu",
+            "type": "select",
+            "required": true,
+            "options": [
+              "Lựa chọn mẫu 1",
+              "Lựa chọn mẫu 2"
+            ]
+          },
+          {
+            "id": "example_radio",
+            "label": "Giới tính",
+            "type": "radio",
+            "required": true,
+            "options": [
+              "Nam",
+              "Nữ",
+              "Khác"
+            ]
+          },
+          {
+            "id": "example_textarea",
+            "label": "Ghi chú",
+            "type": "textarea",
+            "placeholder": "VD: Nhập ghi chú của bạn...",
+            "rows": 4,
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

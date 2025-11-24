@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/*/assets/logo.png
+dist/*/assets/*.png
+dist/*/assets/*.jpg
+dist/*/assets/*.jpeg
+
+# Keep structure but ignore actual campaign assets
+!dist/*/assets/campaign.json
+!dist/*/assets/administrative-unit-data.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
