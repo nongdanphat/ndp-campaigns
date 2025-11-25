@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects
+# Đảm bảo routing hoạt động đúng
+
+/thudong2025/* /thudong2025/index.html 200
+
