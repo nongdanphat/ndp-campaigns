@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nông Dân Phát – Webform Campaign</title>
+
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --card: #fff;
+      --primary: #AB7E31;
+      --danger: #ED3241;
+      --muted: #6b7280;
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(15,23,42,.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: #0f172a;
+    }
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 1rem 1rem 3rem;
+    }
+    .hero {
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 20px; /* Default, sẽ được override bởi config */
+      padding: 1rem;
+      margin: 1rem 0;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      min-height: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+    .hero img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 14px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .hero-text {
+      flex: 1;
+    }
+    .hero-text-overlay {
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      padding: 1.5rem 1rem;
+      border-radius: 12px;
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+    }
+    .hero-title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: white;
+    }
+    .hero-desc {
+      color: white;
+      font-size: .9rem;
+      margin: 0;
+    }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+    .form-title {
+      font-weight: 700;
+      margin: 1rem 0 .5rem;
+      font-size: 1.15rem;
+    }
+    .form-title:first-child {
+      margin-top: 0;
+    }
+    #resultTitle {
+      text-align: center;
+    }
+    .field {
+      margin-bottom: .75rem;
+    }
+    .field label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: .25rem;
+    }
+    .field-error {
+      display: none;
+      color: var(--danger);
+      font-size: .85rem;
+      margin-top: .25rem;
+      font-weight: 500;
+    }
+    .field.error .field-error {
+      display: block;
+    }
+    .field label.required::after {
+      content: " *";
+      color: var(--danger);
+    }
+    input, textarea {
+      width: 100%;
+      padding: .55rem .6rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: .95rem;
+      outline: 0;
+      transition: all .2s;
+      background: #fff;
+      font-family: inherit;
+    }
+    /* Checkbox and Radio */
+    .field-options {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      margin-top: .5rem;
+    }
+    .field-option {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      cursor: pointer;
+    }
+    .field-option input[type="checkbox"],
+    .field-option input[type="radio"] {
+      width: auto;
+      margin: 0;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #cbd5e1;
+      border-radius: 4px;
+      position: relative;
+      transition: all .2s;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .field-option input[type="radio"] {
+      border-radius: 50%;
+      width: 1.4rem;
+      height: 1.4rem;
+      min-width: 1.4rem;
+      min-height: 1.4rem;
+    }
+    .field-option input[type="checkbox"]:checked,
+    .field-option input[type="radio"]:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+    .field-option input[type="checkbox"]:checked::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      width: 5px;
+      height: 10px;
+      border: solid #fff;
+      border-width: 0 2.5px 2.5px 0;
+      box-sizing: border-box;
+    }
+    .field-option input[type="radio"]:checked::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background-color: #fff;
+      border-radius: 50%;
+    }
+    .field-option input[type="checkbox"]:focus,
+    .field-option input[type="radio"]:focus {
+      box-shadow: 0 0 0 3px rgba(171,126,49,.12);
+      outline: none;
+    }
+    .field-option input[type="checkbox"].error,
+    .field-option input[type="radio"].error {
+      border-color: var(--danger);
+    }
+    .field-option label {
+      cursor: pointer;
+      font-weight: normal;
+      color: #0f172a;
+      margin: 0;
+      flex: 1;
+    }
+    /* Không apply error cho option labels - chỉ label chính mới đỏ */
+    /* CSS riêng cho checkbox/radio field */
+    .field-checkbox-radio {
+      margin-bottom: 1.5rem;
+    }
+    .checkbox-hint {
+      font-style: italic;
+      font-weight: normal;
+    }
+    /* CSS riêng cho label chính của checkbox/radio khi có error - DÙNG !important để override */
+    .field-checkbox-radio.error > label:first-of-type,
+    .field-checkbox-radio.error label:first-of-type,
+    .field-checkbox-radio label:first-of-type.error-label,
+    .field-checkbox-radio > label.error-label {
+      color: var(--danger) !important;
+      font-weight: 600 !important;
+    }
+    .field-checkbox-radio.error .field-error {
+      display: block !important;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    /* Custom Dropdown */
+    .custom-dropdown {
+      position: relative;
+      width: 100%;
+    }
+    .custom-dropdown-button {
+      width: 100%;
+      padding: .55rem 2.5rem .55rem .6rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: .95rem;
+      outline: 0;
+      transition: all .2s;
+      background: #fff;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .custom-dropdown-button:hover {
+      border-color: var(--primary);
+    }
+    .custom-dropdown-button:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(171,126,49,.12);
+    }
+    .custom-dropdown-button.error {
+      border-color: var(--danger);
+      background: #fee2e2;
+    }
+    .custom-dropdown-button .dropdown-text {
+      flex: 1;
+      color: #0f172a;
+      font-weight: normal;
+    }
+    .custom-dropdown-button .dropdown-text.placeholder {
+      color: #9ca3af;
+    }
+    .custom-dropdown-button .dropdown-arrow {
+      width: 12px;
+      height: 12px;
+      transition: transform .2s;
+      flex-shrink: 0;
+      margin-right: -1.75rem;
+    }
+    .custom-dropdown.open .custom-dropdown-button .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+    .custom-dropdown-panel {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      max-height: 250px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: none;
+      border: none;
+    }
+    .custom-dropdown.open .custom-dropdown-panel {
+      display: block;
+    }
+    .custom-dropdown-option {
+      padding: .75rem 1rem;
+      cursor: pointer;
+      transition: all .15s;
+      color: #0f172a;
+      border: none;
+      background: transparent;
+      width: calc(100% - 8px);
+      text-align: left;
+      font-size: .95rem;
+      font-family: inherit;
+      font-weight: normal;
+      border-radius: .75rem;
+      margin: 2px 4px;
+      box-sizing: border-box;
+    }
+    .custom-dropdown-option:first-child {
+      margin-top: 4px;
+    }
+    .custom-dropdown-option:last-child {
+      margin-bottom: 4px;
+    }
+    .custom-dropdown-option:hover {
+      background-color: var(--primary);
+      color: #fff;
+    }
+    .custom-dropdown-option.selected {
+      background-color: rgba(171,126,49,.1);
+      color: var(--primary);
+      font-weight: normal;
+    }
+    .custom-dropdown-option.selected:hover {
+      background-color: var(--primary);
+      color: #fff;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(171,126,49,.12);
+    }
+    input.error, textarea.error {
+      border-color: var(--danger);
+      background: #fee2e2;
+    }
+    label.error-label {
+      color: var(--danger);
+      font-weight: 600;
+    }
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: 0;
+      border-radius: .75rem;
+      padding: .65rem 1rem;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      transition: filter .2s;
+      font-size: 1rem;
+    }
+    button:hover:not(:disabled) {
+      filter: brightness(.95);
+    }
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+    .muted {
+      color: #64748b;
+      font-size: .9rem;
+    }
+    .status {
+      margin-top: .6rem;
+      font-size: .9rem;
+      min-height: 1.25rem;
+    }
+    .copyright {
+      text-align: center;
+      color: #64748b;
+      font-size: .85rem;
+      padding: 2rem 1rem 1rem;
+      margin-top: 1rem;
+    }
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,.45);
+      border-top-color: #fff;
+      border-radius: 999px;
+      display: inline-block;
+      animation: spin .6s linear infinite;
+      margin-right: .35rem;
+      vertical-align: -2px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    @media (max-width: 640px) {
+      .hero img {
+        display: block;
+        width: 5rem;
+        height: 5rem;
+        margin-bottom: 0.5rem;
+      }
+      .hero-text {
+        width: 100%;
+      }
+      .hero-text-overlay {
+        width: 100%;
+        display: block;
+      }
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+    @media (max-width: 640px) {
+      .row { 
+        grid-template-columns: 1fr; 
+        gap: 0;
+      }
+    }
+    ul.clean {
+      margin: .25rem 0 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    ul.clean li {
+      margin-bottom: .75rem;
+      line-height: 1.6;
+    }
+    ul.clean li:last-child {
+      margin-bottom: 0;
+    }
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+    .error-message {
+      background: #fee2e2;
+      color: var(--danger);
+      padding: 1rem;
+      border-radius: 12px;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div id="loadingMessage" class="loading">Đang tải biểu mẫu...</div>
+    
+    <div id="errorMessage" class="error-message" style="display: none;"></div>
+    
+    <div id="campaignContent" style="display: none;">
+      <div class="hero" id="campaignHero">
+        <div class="hero-content">
+          <img id="campaignImage" src="" alt="Chiến dịch" />
+          <div class="hero-text">
+            <div class="hero-text-overlay">
+              <div class="hero-title" id="campaignTitle"></div>
+              <p class="hero-desc" id="campaignDesc"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORM CARD -->
+      <div class="card" id="formCard">
+        <div id="formFields"></div>
+      </div>
+
+      <!-- CUSTOM FIELDS CARDS (sẽ được tạo động) -->
+      <div id="customFieldsCards"></div>
+
+      <!-- SUBMIT SECTION (luôn ở cuối) -->
+      <div class="card" id="submitCard">
+        <div class="muted" style="margin-bottom: 1rem;">Các ô có dấu <span style="color: var(--danger);">*</span> không được bỏ trống.</div>
+        <button id="submitBtn">
+          <span id="submitText">Gửi thông tin</span>
+        </button>
+        <div id="status" class="status"></div>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="card" id="resultCard" style="display:none">
+        <div class="form-title" id="resultTitle"></div>
+        <div id="receipt" class="muted"></div>
+        <button id="newSubmitBtn" style="margin-top: 2rem">Gửi thông tin khác</button>
+      </div>
+
+      <!-- ZALO LINK CARD -->
+      <div class="card" id="zaloCard" style="display:none">
+        <div class="form-title" id="zaloTitle"></div>
+        <div id="zaloDescription" class="muted" style="margin-bottom: 1rem;"></div>
+        <div id="zaloLink" class="muted"></div>
+      </div>
+
+      <!-- COPYRIGHT -->
+      <div id="copyright" class="copyright"></div>
+    </div>
+  </div>
+
+  <script>
+    // ======= GLOBAL STATE =======
+    let CAMPAIGN_CONFIG = null;
+    let ADMIN_DATA = [];
+    let districtsByProvince = {};
+    let wardsByDistrict = {};
+    let ZALO_LINKS = {}; // Map: "province_code-district_code-ward_code" => zalo_link
+    let isSubmitting = false;
+
+    // ======= UTILITIES =======
+    const $ = (id) => document.getElementById(id);
+    
+    function getCampaignJsonUrl() {
+      // Luôn load từ ./assets/campaign.json (mỗi chiến dịch có thư mục riêng)
+      return "./assets/campaign.json";
+    }
+
+    function applyTheme(theme) {
+      const root = document.documentElement;
+      if (theme.primaryColor) root.style.setProperty("--primary", theme.primaryColor);
+      if (theme.backgroundColor) root.style.setProperty("--bg", theme.backgroundColor);
+      // cardColor mặc định trắng (#fff), có thể override nếu cần
+      if (theme.cardColor) root.style.setProperty("--card", theme.cardColor);
+      // warningColor thay thế dangerColor
+      if (theme.warningColor) root.style.setProperty("--danger", theme.warningColor);
+      // mutedColor mặc định (#6b7280), có thể override nếu cần
+      if (theme.mutedColor) root.style.setProperty("--muted", theme.mutedColor);
+      // cardBorderRadius dùng cho các card components
+      if (theme.cardBorderRadius) root.style.setProperty("--radius", theme.cardBorderRadius);
+    }
+
+    // ======= CUSTOM DROPDOWN =======
+    function createCustomDropdown(fieldId, placeholder = "Chọn") {
+      const dropdown = document.createElement("div");
+      dropdown.className = "custom-dropdown";
+      dropdown.id = fieldId;
+      
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "custom-dropdown-button";
+      
+      const textSpan = document.createElement("span");
+      textSpan.className = "dropdown-text placeholder";
+      textSpan.textContent = placeholder;
+      button.appendChild(textSpan);
+      
+      const arrowSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      arrowSvg.setAttribute("class", "dropdown-arrow");
+      arrowSvg.setAttribute("width", "12");
+      arrowSvg.setAttribute("height", "12");
+      arrowSvg.setAttribute("viewBox", "0 0 12 12");
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("fill", "#6b7280");
+      path.setAttribute("d", "M6 9L1 4h10z");
+      arrowSvg.appendChild(path);
+      button.appendChild(arrowSvg);
+      
+      const panel = document.createElement("div");
+      panel.className = "custom-dropdown-panel";
+      
+      dropdown.appendChild(button);
+      dropdown.appendChild(panel);
+      
+      // Click handler
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.contains("open");
+        closeAllDropdowns();
+        if (!isOpen) {
+          dropdown.classList.add("open");
+        }
+      });
+      
+      return dropdown;
+    }
+    
+    function closeAllDropdowns() {
+      document.querySelectorAll(".custom-dropdown").forEach(dd => {
+        dd.classList.remove("open");
+      });
+    }
+    
+    function setDropdownValue(dropdown, value, text) {
+      const button = dropdown.querySelector(".custom-dropdown-button");
+      const textSpan = button.querySelector(".dropdown-text");
+      if (value && text) {
+        textSpan.textContent = text;
+        textSpan.classList.remove("placeholder");
+        dropdown.dataset.value = value;
+      } else {
+        textSpan.textContent = dropdown.dataset.placeholder || "Chọn";
+        textSpan.classList.add("placeholder");
+        dropdown.dataset.value = "";
+      }
+      // Update selected state
+      dropdown.querySelectorAll(".custom-dropdown-option").forEach(opt => {
+        opt.classList.toggle("selected", opt.dataset.value === value);
+      });
+    }
+    
+    function getDropdownValue(dropdown) {
+      return dropdown.dataset.value || "";
+    }
+    
+    function clearDropdown(dropdown, placeholder = "Chọn") {
+      const panel = dropdown.querySelector(".custom-dropdown-panel");
+      panel.innerHTML = "";
+      setDropdownValue(dropdown, "", "");
+      dropdown.dataset.placeholder = placeholder;
+    }
+    
+    function fillDropdown(dropdown, list, placeholder = "Chọn") {
+      const panel = dropdown.querySelector(".custom-dropdown-panel");
+      panel.innerHTML = "";
+      dropdown.dataset.placeholder = placeholder;
+      
+      (list || []).forEach((item) => {
+        const opt = document.createElement("button");
+        opt.type = "button";
+        opt.className = "custom-dropdown-option";
+        const value = String(item.code || item.value || item);
+        const text = item.name || item.label || String(item);
+        opt.dataset.value = value;
+        opt.textContent = text;
+        
+        opt.addEventListener("click", () => {
+          setDropdownValue(dropdown, value, text);
+          dropdown.classList.remove("open");
+          
+          // Trigger change event for compatibility
+          const event = new Event("change", { bubbles: true });
+          dropdown.dispatchEvent(event);
+        });
+        
+        panel.appendChild(opt);
+      });
+      
+      // Set placeholder if no value selected
+      if (!getDropdownValue(dropdown)) {
+        setDropdownValue(dropdown, "", "");
+      }
+    }
+    
+    function addDropdownOption(dropdown, value, text) {
+      const panel = dropdown.querySelector(".custom-dropdown-panel");
+      const opt = document.createElement("button");
+      opt.type = "button";
+      opt.className = "custom-dropdown-option";
+      opt.dataset.value = String(value);
+      opt.textContent = text;
+      
+      opt.addEventListener("click", () => {
+        setDropdownValue(dropdown, String(value), text);
+        dropdown.classList.remove("open");
+        
+        const event = new Event("change", { bubbles: true });
+        dropdown.dispatchEvent(event);
+      });
+      
+      panel.appendChild(opt);
+    }
+
+    function buildIndexes(data) {
+      districtsByProvince = {};
+      wardsByDistrict = {};
+      data.forEach((p) => {
+        districtsByProvince[String(p.code)] = p.districts || [];
+        (p.districts || []).forEach((d) => {
+          wardsByDistrict[String(d.code)] = d.wards || [];
+        });
+      });
+    }
+
+    // Parse CSV Zalo links và tạo map
+    function parseZaloCSV(csvText) {
+      ZALO_LINKS = {};
+      const lines = csvText.split("\n").filter(line => line.trim());
+      // Bỏ dòng header
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        // Parse CSV đơn giản (xử lý cả trường hợp có dấu phẩy trong quoted string)
+        const parts = [];
+        let current = "";
+        let inQuotes = false;
+        for (let j = 0; j < line.length; j++) {
+          const char = line[j];
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            parts.push(current.trim());
+            current = "";
+          } else {
+            current += char;
+          }
+        }
+        parts.push(current.trim());
+        
+        if (parts.length >= 7) {
+          const provinceCode = parts[0].trim();
+          const districtCode = parts[1].trim();
+          const wardCode = parts[2].trim();
+          const zaloLink = parts[6].trim();
+          
+          if (provinceCode && districtCode && wardCode && zaloLink) {
+            const key = `${provinceCode}-${districtCode}-${wardCode}`;
+            ZALO_LINKS[key] = zaloLink;
+          }
+        }
+      }
+    }
+
+    // Tìm link Zalo dựa trên code tỉnh-huyện-xã
+    function findZaloLink(provinceCode, districtCode, wardCode) {
+      if (!provinceCode || !districtCode || !wardCode) return "";
+      const key = `${provinceCode}-${districtCode}-${wardCode}`;
+      return ZALO_LINKS[key] || "";
+    }
+
+    function findName(arr, code) {
+      const s = String(code || "");
+      const f = (arr || []).find((x) => String(x.code) === s);
+      return f ? f.name : "";
+    }
+
+    function setStatus(msg, color = "#64748b") {
+      const statusEl = $("status");
+      if (statusEl) {
+        // Nếu color là CSS variable, lấy giá trị từ computed style
+        if (color.startsWith("var(")) {
+          const root = getComputedStyle(document.documentElement);
+          const varName = color.match(/var\(--([^)]+)\)/)?.[1];
+          if (varName) {
+            color = root.getPropertyValue(`--${varName}`).trim() || color;
+          }
+        }
+        statusEl.style.color = color;
+        statusEl.textContent = msg || "";
+      }
+    }
+
+    function showError(message) {
+      const errorEl = $("errorMessage");
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.style.display = "block";
+      }
+    }
+
+    function hideError() {
+      const errorEl = $("errorMessage");
+      if (errorEl) {
+        errorEl.style.display = "none";
+      }
+    }
+
+    // ======= FORM RENDERING =======
+    function createFieldElement(fieldId, fieldConfig, sectionTitle = null) {
+      const fieldDiv = document.createElement("div");
+      fieldDiv.className = "field";
+      
+      const label = document.createElement("label");
+      label.setAttribute("for", fieldId);
+      // Thêm data attribute để dễ tìm label chính cho checkbox/radio
+      if (fieldConfig.type === "checkbox" || fieldConfig.type === "radio") {
+        label.dataset.fieldMainLabel = "true";
+      }
+      // Thêm text hướng dẫn cho checkbox với style in nghiêng
+      if (fieldConfig.type === "checkbox") {
+        label.innerHTML = fieldConfig.label + ' <span class="checkbox-hint">(Chọn một hoặc nhiều)</span>';
+      } else {
+        label.textContent = fieldConfig.label;
+      }
+      if (fieldConfig.required) {
+        label.classList.add("required");
+      }
+      fieldDiv.appendChild(label);
+
+      // Thêm thông báo lỗi ngay sau label nếu field bắt buộc (cho checkbox/radio)
+      let errorMsg = null;
+      if (fieldConfig.required && (fieldConfig.type === "checkbox" || fieldConfig.type === "radio")) {
+        errorMsg = document.createElement("div");
+        errorMsg.className = "field-error";
+        errorMsg.textContent = "Vui lòng chọn, không bỏ trống";
+        fieldDiv.appendChild(errorMsg);
+      }
+
+      let input;
+      if (fieldConfig.type === "select" && fieldConfig.source === "administrative") {
+        // Administrative unit dropdown
+        input = createCustomDropdown(fieldId, "Chọn");
+        input.dataset.required = fieldConfig.required || false;
+        clearDropdown(input);
+        fieldDiv.appendChild(input);
+      } else if (fieldConfig.type === "select" && fieldConfig.options) {
+        // Custom select với options
+        input = createCustomDropdown(fieldId, fieldConfig.placeholder || "Chọn");
+        input.dataset.required = fieldConfig.required || false;
+        clearDropdown(input, fieldConfig.placeholder || "Chọn");
+        
+        // Thêm các options (hỗ trợ cả object và string)
+        (fieldConfig.options || []).forEach(option => {
+          let optionValue, optionText;
+          if (typeof option === "object" && option !== null) {
+            optionValue = option.value !== undefined ? String(option.value) : String(option);
+            optionText = option.label !== undefined ? String(option.label) : optionValue;
+          } else {
+            optionValue = String(option);
+            optionText = optionValue;
+          }
+          addDropdownOption(input, optionValue, optionText);
+        });
+        fieldDiv.appendChild(input);
+      } else if (fieldConfig.type === "checkbox" && fieldConfig.options) {
+        // Checkbox group
+        fieldDiv.classList.add("field-checkbox-radio"); // Thêm class riêng
+        const optionsContainer = document.createElement("div");
+        optionsContainer.className = "field-options";
+        optionsContainer.dataset.fieldId = fieldId;
+        
+        (fieldConfig.options || []).forEach((option, index) => {
+          const optionDiv = document.createElement("div");
+          optionDiv.className = "field-option";
+          
+          // Xử lý option: nếu là object thì lấy label hoặc value, nếu là string thì dùng trực tiếp
+          let optionValue, optionText;
+          if (typeof option === "object" && option !== null) {
+            optionValue = option.value !== undefined ? String(option.value) : String(option);
+            optionText = option.label !== undefined ? String(option.label) : optionValue;
+          } else {
+            optionValue = String(option);
+            optionText = optionValue;
+          }
+          
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.id = `${fieldId}_${index}`;
+          checkbox.name = fieldId;
+          checkbox.value = optionValue;
+          checkbox.dataset.required = fieldConfig.required || false;
+          
+          const optionLabel = document.createElement("label");
+          optionLabel.setAttribute("for", `${fieldId}_${index}`);
+          optionLabel.textContent = optionText;
+          
+          optionDiv.appendChild(checkbox);
+          optionDiv.appendChild(optionLabel);
+          optionsContainer.appendChild(optionDiv);
+        });
+        
+        fieldDiv.appendChild(optionsContainer);
+        input = optionsContainer; // Use container as input reference
+      } else if (fieldConfig.type === "radio" && fieldConfig.options) {
+        // Radio group
+        fieldDiv.classList.add("field-checkbox-radio"); // Thêm class riêng
+        const optionsContainer = document.createElement("div");
+        optionsContainer.className = "field-options";
+        optionsContainer.dataset.fieldId = fieldId;
+        
+        (fieldConfig.options || []).forEach((option, index) => {
+          const optionDiv = document.createElement("div");
+          optionDiv.className = "field-option";
+          
+          // Xử lý option: nếu là object thì lấy label hoặc value, nếu là string thì dùng trực tiếp
+          let optionValue, optionText;
+          if (typeof option === "object" && option !== null) {
+            optionValue = option.value !== undefined ? String(option.value) : String(option);
+            optionText = option.label !== undefined ? String(option.label) : optionValue;
+          } else {
+            optionValue = String(option);
+            optionText = optionValue;
+          }
+          
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.id = `${fieldId}_${index}`;
+          radio.name = fieldId;
+          radio.value = optionValue;
+          radio.dataset.required = fieldConfig.required || false;
+          
+          const optionLabel = document.createElement("label");
+          optionLabel.setAttribute("for", `${fieldId}_${index}`);
+          optionLabel.textContent = optionText;
+          
+          optionDiv.appendChild(radio);
+          optionDiv.appendChild(optionLabel);
+          optionsContainer.appendChild(optionDiv);
+        });
+        
+        fieldDiv.appendChild(optionsContainer);
+        input = optionsContainer; // Use container as input reference
+      } else if (fieldConfig.type === "textarea") {
+        input = document.createElement("textarea");
+        input.id = fieldId;
+        input.rows = fieldConfig.rows || 3;
+        input.required = fieldConfig.required || false;
+        if (fieldConfig.placeholder) input.placeholder = fieldConfig.placeholder;
+        fieldDiv.appendChild(input);
+      } else {
+        input = document.createElement("input");
+        input.id = fieldId;
+        input.type = fieldConfig.type || "text";
+        input.required = fieldConfig.required || false;
+        if (fieldConfig.placeholder) input.placeholder = fieldConfig.placeholder;
+        // Chỉ cho phép nhập số cho phone
+        if (fieldConfig.type === "tel" || fieldId === "phone") {
+          input.pattern = "[0-9]*";
+          input.inputMode = "numeric";
+          input.addEventListener("input", function(e) {
+            // Chỉ cho phép số
+            this.value = this.value.replace(/[^0-9]/g, "");
+          });
+        }
+        fieldDiv.appendChild(input);
+      }
+
+      // Thêm thông báo lỗi nếu field bắt buộc (cho các field khác, không phải checkbox/radio)
+      if (fieldConfig.required && fieldConfig.type !== "checkbox" && fieldConfig.type !== "radio") {
+        const errorMsg = document.createElement("div");
+        errorMsg.className = "field-error";
+        // Xác định loại thông báo dựa trên loại field
+        if (fieldConfig.type === "select") {
+          errorMsg.textContent = "Vui lòng chọn, không bỏ trống";
+        } else {
+          errorMsg.textContent = "Vui lòng điền, không bỏ trống";
+        }
+        fieldDiv.appendChild(errorMsg);
+      }
+
+      // Wrap in section if needed
+      if (sectionTitle) {
+        const sectionDiv = document.createElement("div");
+        const sectionTitleEl = document.createElement("div");
+        sectionTitleEl.className = "form-title";
+        sectionTitleEl.textContent = sectionTitle;
+        sectionDiv.appendChild(sectionTitleEl);
+        sectionDiv.appendChild(fieldDiv);
+        return sectionDiv;
+      }
+
+      return fieldDiv;
+    }
+
+    function renderForm() {
+      const formFieldsEl = $("formFields");
+      if (!formFieldsEl || !CAMPAIGN_CONFIG) return;
+
+      formFieldsEl.innerHTML = "";
+
+      const fields = CAMPAIGN_CONFIG.fields;
+      const mandatory = fields.mandatory || {};
+      // Custom fields được render riêng trong renderCustomFieldsCards()
+
+      // Render mandatory fields
+      let currentSection = null;
+      
+      // Basic info section
+      const basicSection = document.createElement("div");
+      const basicTitle = document.createElement("div");
+      basicTitle.className = "form-title";
+      basicTitle.textContent = "Thông tin cơ bản";
+      basicSection.appendChild(basicTitle);
+
+      // Full name and phone
+      basicSection.appendChild(createFieldElement("full_name", mandatory.full_name));
+      basicSection.appendChild(createFieldElement("phone", mandatory.phone));
+      formFieldsEl.appendChild(basicSection);
+
+      // Address section (không có tiêu đề)
+      const addressSection = document.createElement("div");
+
+      // Administrative units in rows
+      const adminRow1 = document.createElement("div");
+      adminRow1.className = "row";
+      adminRow1.appendChild(createFieldElement("province", mandatory.province));
+      adminRow1.appendChild(createFieldElement("district", mandatory.district));
+      addressSection.appendChild(adminRow1);
+
+      const adminRow2 = document.createElement("div");
+      adminRow2.className = "row";
+      adminRow2.appendChild(createFieldElement("ward", mandatory.ward));
+      adminRow2.appendChild(createFieldElement("hamlet", mandatory.hamlet));
+      addressSection.appendChild(adminRow2);
+
+      addressSection.appendChild(createFieldElement("address", mandatory.address));
+
+      formFieldsEl.appendChild(addressSection);
+
+      // Setup administrative unit dropdowns
+      setupAdministrativeDropdowns();
+
+      // Render custom fields thành các card riêng
+      renderCustomFieldsCards();
+      
+      // Setup real-time validation - xóa error khi user thay đổi
+      setupRealTimeValidation();
+    }
+    
+    // Hàm xóa error cho một field cụ thể
+    function clearFieldError(fieldId, fieldType) {
+      if (fieldType === "checkbox" || fieldType === "radio") {
+        // Xử lý checkbox/radio
+        const optionsContainer = document.querySelector(`.field-options[data-field-id="${fieldId}"]`);
+        if (optionsContainer) {
+          const fieldDiv = optionsContainer.closest(".field");
+          if (fieldDiv) {
+            // Xóa error từ inputs
+            optionsContainer.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+              input.classList.remove("error");
+            });
+            // Xóa error từ label chính
+            let mainLabel = fieldDiv.querySelector('label[data-field-main-label="true"]');
+            if (!mainLabel) {
+              mainLabel = fieldDiv.querySelector('label:first-of-type');
+            }
+            if (mainLabel && !mainLabel.closest(".field-option")) {
+              mainLabel.classList.remove("error-label");
+              mainLabel.style.color = "";
+              mainLabel.style.fontWeight = "";
+            }
+            // Xóa error từ field container
+            fieldDiv.classList.remove("error");
+          }
+        }
+      } else {
+        // Xử lý các field thông thường
+        const el = $(fieldId);
+        if (!el) return;
+        const fieldDiv = el.closest(".field");
+        if (!fieldDiv) return;
+        
+        // Xóa error từ input
+        if (el.classList.contains("custom-dropdown")) {
+          const button = el.querySelector(".custom-dropdown-button");
+          if (button) button.classList.remove("error");
+        } else {
+          el.classList.remove("error");
+        }
+        // Xóa error từ label
+        const label = el.previousElementSibling;
+        if (label && label.tagName === "LABEL") {
+          label.classList.remove("error-label");
+        }
+        // Xóa error từ field container
+        fieldDiv.classList.remove("error");
+      }
+    }
+    
+    // Setup real-time validation - xóa error khi user thay đổi
+    function setupRealTimeValidation() {
+      // Xử lý các input thông thường
+      document.querySelectorAll('input[type="text"], input[type="tel"], input[type="number"], textarea').forEach(input => {
+        input.addEventListener('input', function() {
+          const fieldId = this.id;
+          const fieldDiv = this.closest(".field");
+          if (fieldDiv && fieldDiv.classList.contains("error")) {
+            clearFieldError(fieldId, this.type || "text");
+          }
+        });
+      });
+      
+      // Xử lý custom dropdown - cần listen vào option click
+      document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+        const fieldId = dropdown.id;
+        const panel = dropdown.querySelector('.custom-dropdown-panel');
+        if (panel) {
+          panel.addEventListener('click', function(e) {
+            if (e.target.classList.contains('custom-dropdown-option')) {
+              const fieldDiv = dropdown.closest(".field");
+              if (fieldDiv && fieldDiv.classList.contains("error")) {
+                clearFieldError(fieldId, "select");
+              }
+            }
+          });
+        }
+      });
+      
+      // Xử lý checkbox và radio
+      document.querySelectorAll('.field-options').forEach(optionsContainer => {
+        const fieldId = optionsContainer.dataset.fieldId;
+        if (fieldId) {
+          optionsContainer.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+            input.addEventListener('change', function() {
+              const fieldDiv = optionsContainer.closest(".field");
+              if (fieldDiv && fieldDiv.classList.contains("error")) {
+                // Kiểm tra xem có ít nhất một option được chọn không
+                const checkedInputs = optionsContainer.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked');
+                if (checkedInputs.length > 0) {
+                  clearFieldError(fieldId, this.type);
+                }
+              }
+            });
+          });
+        }
+      });
+    }
+
+    function renderCustomFieldsCards() {
+      const customFieldsCardsEl = $("customFieldsCards");
+      if (!customFieldsCardsEl || !CAMPAIGN_CONFIG) return;
+
+      customFieldsCardsEl.innerHTML = "";
+
+      // Cấu trúc: custom là array các section, mỗi section có title và fields
+      const custom = CAMPAIGN_CONFIG.fields.custom || [];
+      
+      if (custom.length === 0) return;
+
+      // Tạo một card riêng cho mỗi section
+      custom.forEach(section => {
+        const title = section.title || "Thông tin đăng ký";
+        const fields = section.fields || [];
+        if (fields.length === 0) return;
+
+        // Tạo card container
+        const card = document.createElement("div");
+        card.className = "card";
+
+        // Tạo tiêu đề section
+        const sectionTitleEl = document.createElement("div");
+        sectionTitleEl.className = "form-title";
+        sectionTitleEl.textContent = title;
+        card.appendChild(sectionTitleEl);
+
+        // Tạo container cho các fields trong section này
+        const fieldsContainer = document.createElement("div");
+        
+        fields.forEach(field => {
+          fieldsContainer.appendChild(createFieldElement(field.id, field));
+        });
+
+        card.appendChild(fieldsContainer);
+        customFieldsCardsEl.appendChild(card);
+      });
+    }
+
+    function setupAdministrativeDropdowns() {
+      const provinceEl = $("province");
+      const districtEl = $("district");
+      const wardEl = $("ward");
+
+      if (!provinceEl || !districtEl || !wardEl) return;
+
+      fillDropdown(provinceEl, ADMIN_DATA);
+
+      provinceEl.addEventListener("change", () => {
+        const provinceValue = getDropdownValue(provinceEl);
+        fillDropdown(districtEl, districtsByProvince[provinceValue]);
+        clearDropdown(wardEl);
+      });
+
+      districtEl.addEventListener("change", () => {
+        const districtValue = getDropdownValue(districtEl);
+        fillDropdown(wardEl, wardsByDistrict[districtValue]);
+      });
+    }
+
+    // ======= VALIDATION =======
+    function markRequiredError(fieldIds) {
+      let first = null;
+      fieldIds.forEach((id) => {
+        const el = $(id);
+        if (!el) return; // Skip nếu không tìm thấy (có thể là checkbox/radio được xử lý riêng)
+        const fieldDiv = el.closest(".field");
+        const label = el.previousElementSibling;
+        
+        // Check if it's a custom dropdown
+        let isEmpty;
+        let targetEl = el;
+        
+        if (el.classList.contains("custom-dropdown")) {
+          // Custom dropdown - XỬ LÝ RIÊNG
+          isEmpty = !getDropdownValue(el);
+          targetEl = el.querySelector(".custom-dropdown-button");
+          
+          // Apply error styles
+          if (targetEl) {
+            targetEl.classList.toggle("error", isEmpty);
+          }
+          if (fieldDiv) {
+            fieldDiv.classList.toggle("error", isEmpty);
+          }
+          
+          // Apply error to label
+          if (label && label.tagName === "LABEL") {
+            label.classList.toggle("error-label", isEmpty);
+          }
+        } else if (el.classList.contains("field-options")) {
+          // Checkbox or radio group - XỬ LÝ RIÊNG HOÀN TOÀN
+          const checkedInputs = el.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked');
+          isEmpty = checkedInputs.length === 0;
+          
+          // Apply error to all inputs in the group (chỉ border, không đỏ label)
+          el.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+            input.classList.toggle("error", isEmpty);
+          });
+          // KHÔNG apply error cho option labels - chỉ đỏ label chính
+          el.querySelectorAll('.field-option label').forEach(optLabel => {
+            // Đảm bảo không có error-label class
+            optLabel.classList.remove("error-label");
+          });
+          targetEl = el.querySelector('input[type="checkbox"], input[type="radio"]');
+          
+          // XỬ LÝ RIÊNG CHO LABEL CHÍNH CỦA CHECKBOX/RADIO - ĐẢM BẢO HOẠT ĐỘNG
+          if (fieldDiv) {
+            // Tìm label chính bằng data attribute hoặc first-of-type
+            let mainLabel = fieldDiv.querySelector('label[data-field-main-label="true"]');
+            if (!mainLabel) {
+              mainLabel = fieldDiv.querySelector('label:first-of-type');
+            }
+            if (mainLabel) {
+              // Kiểm tra chắc chắn không phải label trong field-option
+              if (!mainLabel.closest(".field-option")) {
+                // Thêm class error-label trực tiếp - DÙNG add/remove để đảm bảo
+                if (isEmpty) {
+                  mainLabel.classList.add("error-label");
+                  // Force style để đảm bảo hiển thị - dùng getComputedStyle để lấy giá trị CSS variable
+                  const root = document.documentElement;
+                  const dangerColor = getComputedStyle(root).getPropertyValue("--danger").trim() || "#ED3241";
+                  mainLabel.style.color = dangerColor;
+                  mainLabel.style.fontWeight = "600";
+                } else {
+                  mainLabel.classList.remove("error-label");
+                  mainLabel.style.color = "";
+                  mainLabel.style.fontWeight = "";
+                }
+              }
+            }
+            // Thêm class error cho field container - QUAN TRỌNG để CSS hoạt động
+            if (isEmpty) {
+              fieldDiv.classList.add("error");
+            } else {
+              fieldDiv.classList.remove("error");
+            }
+          }
+        } else {
+          // Regular input fields (text, textarea, number, etc.)
+          isEmpty = !String(el.value || "").trim();
+          targetEl = el;
+          
+          // Apply error styles
+          if (targetEl) {
+            targetEl.classList.toggle("error", isEmpty);
+          }
+          if (fieldDiv) {
+            fieldDiv.classList.toggle("error", isEmpty);
+          }
+          
+          // Apply error to label
+          if (label && label.tagName === "LABEL" && !label.closest(".field-option")) {
+            label.classList.toggle("error-label", isEmpty);
+          }
+        }
+        
+        if (isEmpty && !first) {
+          first = targetEl || el;
+        }
+      });
+      if (first) {
+        if (first.classList && first.classList.contains("custom-dropdown-button")) {
+          first.focus();
+        } else {
+          first.focus();
+        }
+      }
+      return !first;
+    }
+
+    // Hàm validate riêng cho checkbox/radio
+    function validateCheckboxRadio(fieldId, fieldConfig) {
+      // Tìm field-options container bằng data-field-id
+      const optionsContainer = document.querySelector(`.field-options[data-field-id="${fieldId}"]`);
+      if (!optionsContainer) {
+        return false;
+      }
+      
+      const fieldDiv = optionsContainer.closest(".field");
+      if (!fieldDiv) {
+        return false;
+      }
+      
+      const checkedInputs = optionsContainer.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked');
+      const isEmpty = checkedInputs.length === 0;
+      
+      // Apply error to all inputs in the group (chỉ border, không đỏ label)
+      optionsContainer.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+        input.classList.toggle("error", isEmpty);
+      });
+      // KHÔNG apply error cho option labels - chỉ đỏ label chính
+      optionsContainer.querySelectorAll('.field-option label').forEach(optLabel => {
+        // Đảm bảo không có error-label class
+        optLabel.classList.remove("error-label");
+      });
+      
+      // Tìm và apply error cho label chính
+      let mainLabel = fieldDiv.querySelector('label[data-field-main-label="true"]');
+      if (!mainLabel) {
+        mainLabel = fieldDiv.querySelector('label:first-of-type');
+      }
+      
+      if (mainLabel && !mainLabel.closest(".field-option")) {
+        if (isEmpty) {
+          mainLabel.classList.add("error-label");
+          const root = document.documentElement;
+          const dangerColor = getComputedStyle(root).getPropertyValue("--danger").trim() || "#ED3241";
+          mainLabel.style.color = dangerColor;
+          mainLabel.style.fontWeight = "600";
+        } else {
+          mainLabel.classList.remove("error-label");
+          mainLabel.style.color = "";
+          mainLabel.style.fontWeight = "";
+        }
+      }
+      
+      // Thêm class error cho field container
+      if (isEmpty) {
+        fieldDiv.classList.add("error");
+      } else {
+        fieldDiv.classList.remove("error");
+      }
+      
+      return !isEmpty; // Return true nếu valid (có chọn), false nếu invalid (chưa chọn)
+    }
+
+    function validateForm() {
+      const requiredFields = [];
+      const checkboxRadioFields = []; // Tách riêng checkbox/radio
+      const mandatory = CAMPAIGN_CONFIG.fields.mandatory || {};
+      const custom = CAMPAIGN_CONFIG.fields.custom || [];
+
+      Object.keys(mandatory).forEach(id => {
+        if (mandatory[id].required) {
+          requiredFields.push(id);
+        }
+      });
+
+      // Duyệt qua tất cả sections và fields trong custom (cấu trúc: array với title và fields)
+      custom.forEach(section => {
+        const fields = section.fields || [];
+        fields.forEach(field => {
+          if (field.required) {
+            // Tách checkbox/radio ra riêng
+            if (field.type === "checkbox" || field.type === "radio") {
+              checkboxRadioFields.push({ id: field.id, config: field });
+            } else {
+              requiredFields.push(field.id);
+            }
+          }
+        });
+      });
+
+      // Validate các field thông thường
+      const regularFieldsValid = markRequiredError(requiredFields);
+      
+      // Validate checkbox/radio riêng
+      let checkboxRadioValid = true;
+      checkboxRadioFields.forEach(({ id, config }) => {
+        const isValid = validateCheckboxRadio(id, config);
+        if (!isValid) {
+          checkboxRadioValid = false;
+        }
+      });
+
+      return regularFieldsValid && checkboxRadioValid;
+    }
+
+    // ======= SUBMISSION =======
+    function collectFormData() {
+      const data = {
+        campaign_id: CAMPAIGN_CONFIG.campaign_id || "default"
+      };
+
+      // Collect mandatory fields
+      let provinceCode = "";
+      let districtCode = "";
+      let wardCode = "";
+      
+      Object.keys(CAMPAIGN_CONFIG.fields.mandatory).forEach(id => {
+        const el = $(id);
+        if (!el) return;
+        
+        if (id === "province" || id === "district" || id === "ward") {
+          // For administrative units, get the name from custom dropdown
+          const value = getDropdownValue(el);
+          if (id === "province") {
+            provinceCode = value;
+            data.province = findName(ADMIN_DATA, value);
+          } else if (id === "district") {
+            const provinceValue = getDropdownValue($("province"));
+            districtCode = value;
+            data.district = findName(districtsByProvince[provinceValue], value);
+          } else if (id === "ward") {
+            const districtValue = getDropdownValue($("district"));
+            wardCode = value;
+            data.ward = findName(wardsByDistrict[districtValue], value);
+          }
+        } else {
+          // Regular input
+          if (el.classList && el.classList.contains("custom-dropdown")) {
+            data[id] = getDropdownValue(el);
+          } else {
+            data[id] = el.value.trim();
+          }
+        }
+      });
+
+      // Collect custom fields (cấu trúc: array với title và fields)
+      const custom = CAMPAIGN_CONFIG.fields.custom || [];
+      custom.forEach(section => {
+        const fields = section.fields || [];
+        fields.forEach(field => {
+          // Tìm element - checkbox/radio dùng container với data-field-id
+          let el = $(field.id);
+          if (!el && (field.type === "checkbox" || field.type === "radio")) {
+            // Tìm container bằng data-field-id
+            el = document.querySelector(`.field-options[data-field-id="${field.id}"]`);
+          }
+          
+          if (el) {
+            if (el.classList && el.classList.contains("custom-dropdown")) {
+              data[field.id] = getDropdownValue(el);
+            } else if (el.classList && el.classList.contains("field-options")) {
+              // Checkbox or radio group
+              if (field.type === "checkbox") {
+                // Checkbox: collect all checked values
+                const checkedInputs = el.querySelectorAll('input[type="checkbox"]:checked');
+                data[field.id] = Array.from(checkedInputs).map(input => input.value).join(", ");
+              } else if (field.type === "radio") {
+                // Radio: get the checked value
+                const checkedInput = el.querySelector('input[type="radio"]:checked');
+                data[field.id] = checkedInput ? checkedInput.value : "";
+              }
+            } else {
+              data[field.id] = el.value.trim();
+            }
+          }
+        });
+      });
+
+      // Add metadata if enabled
+      if (CAMPAIGN_CONFIG.config.showReferralInfo) {
+        data.referral = document.referrer || "";
+      }
+      if (CAMPAIGN_CONFIG.config.showDeviceInfo) {
+        data.device = navigator.userAgent || "N/A";
+      }
+      // IP address sẽ được thêm trong handleSubmit() sau khi lấy từ API
+      
+      // Tìm link Zalo dựa trên code tỉnh-huyện-xã
+      const zaloLink = findZaloLink(provinceCode, districtCode, wardCode);
+      if (zaloLink) {
+        data.zalo_link = zaloLink;
+      }
+
+      return data;
+    }
+
+    // Lấy IP address từ API
+    async function getUserIP() {
+      try {
+        // Dùng ipify.org - API miễn phí, đơn giản
+        const response = await fetch("https://api.ipify.org?format=json");
+        const data = await response.json();
+        return data.ip || "N/A";
+      } catch (err) {
+        return "N/A";
+      }
+    }
+
+    function renderReceipt(data, serverTimeISO) {
+      const receiptEl = $("receipt");
+      if (!receiptEl) return;
+
+      const lines = [];
+      
+      // Campaign ID
+      lines.push(["Chiến dịch", data.campaign_id]);
+
+      // Mandatory fields
+      Object.keys(CAMPAIGN_CONFIG.fields.mandatory).forEach(id => {
+        const field = CAMPAIGN_CONFIG.fields.mandatory[id];
+        if (data[id]) {
+          lines.push([field.label, data[id]]);
+        }
+      });
+
+      // Custom fields (cấu trúc: array với title và fields)
+      const custom = CAMPAIGN_CONFIG.fields.custom || [];
+      custom.forEach(section => {
+        const fields = section.fields || [];
+        fields.forEach(field => {
+          if (data[field.id]) {
+            lines.push([field.label, data[field.id]]);
+          }
+        });
+      });
+
+      // Metadata - chỉ hiển thị thời gian, không hiển thị referral và device
+      if (serverTimeISO) {
+        lines.push(["Thời gian", new Date(serverTimeISO).toLocaleString("vi-VN")]);
+      }
+
+      receiptEl.innerHTML = `
+        <ul class="clean">
+          ${lines.map(([k, v]) => `<li><b>${k}:</b> ${v ?? ""}</li>`).join("")}
+        </ul>
+      `;
+
+      // Render Zalo link section riêng nếu có và được bật
+      const zaloConfig = CAMPAIGN_CONFIG.config?.zalo || {};
+      if (zaloConfig.enabled !== false && data.zalo_link) {
+        const zaloCard = $("zaloCard");
+        const zaloTitle = $("zaloTitle");
+        const zaloDescription = $("zaloDescription");
+        const zaloLink = $("zaloLink");
+
+        if (zaloCard) {
+          if (zaloTitle) {
+            zaloTitle.textContent = zaloConfig.title || "Tham gia nhóm Zalo";
+          }
+          if (zaloDescription) {
+            zaloDescription.textContent = zaloConfig.description || "Vui lòng tham gia nhóm Zalo để nhận được hỗ trợ tốt nhất.";
+          }
+          if (zaloLink) {
+            zaloLink.innerHTML = `<strong>Link:</strong> <a href="${data.zalo_link}" target="_blank" rel="noopener noreferrer">${data.zalo_link}</a>`;
+          }
+          zaloCard.style.display = "block";
+        }
+      } else {
+        const zaloCard = $("zaloCard");
+        if (zaloCard) {
+          zaloCard.style.display = "none";
+        }
+      }
+    }
+
+    function showResultCard() {
+      $("formCard").style.display = "none";
+      $("customFieldsCards").style.display = "none";
+      $("submitCard").style.display = "none";
+      $("resultCard").style.display = "block";
+      // Zalo card sẽ được hiển thị trong renderReceipt nếu có
+    }
+
+    function showFormCard() {
+      $("formCard").style.display = "block";
+      $("customFieldsCards").style.display = "block";
+      $("submitCard").style.display = "block";
+      $("resultCard").style.display = "none";
+      const zaloCard = $("zaloCard");
+      if (zaloCard) zaloCard.style.display = "none";
+    }
+
+    function resetForm() {
+      // Reset all fields
+      Object.keys(CAMPAIGN_CONFIG.fields.mandatory).forEach(id => {
+        // Tìm element - checkbox/radio dùng container với data-field-id
+        let el = $(id);
+        const fieldConfig = CAMPAIGN_CONFIG.fields.mandatory[id];
+        if (!el && fieldConfig && (fieldConfig.type === "checkbox" || fieldConfig.type === "radio")) {
+          // Tìm container bằng data-field-id
+          el = document.querySelector(`.field-options[data-field-id="${id}"]`);
+        }
+        
+        if (!el) return;
+        
+        if (id === "province" || id === "district" || id === "ward") {
+          clearDropdown(el);
+          if (id === "province") {
+            fillDropdown(el, ADMIN_DATA);
+          }
+          // Đảm bảo district và ward được reset về placeholder
+          if (id === "district" || id === "ward") {
+            const button = el.querySelector(".custom-dropdown-button");
+            const textSpan = button?.querySelector(".dropdown-text");
+            if (textSpan) {
+              textSpan.textContent = "Chọn";
+              textSpan.classList.add("placeholder");
+            }
+          }
+        } else if (el.classList && el.classList.contains("field-options")) {
+          // Reset checkbox or radio group - XỬ LÝ RIÊNG
+          el.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+            input.checked = false;
+            input.classList.remove("error");
+            // Trigger change event để đảm bảo UI được update
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+          });
+          // Reset label chính của checkbox/radio
+          const fieldDiv = el.closest(".field");
+          if (fieldDiv) {
+            fieldDiv.classList.remove("error");
+            const mainLabel = fieldDiv.querySelector('label:first-of-type');
+            if (mainLabel && !mainLabel.closest(".field-option")) {
+              mainLabel.classList.remove("error-label");
+              mainLabel.style.color = "";
+              mainLabel.style.fontWeight = "";
+            }
+          }
+        } else {
+          if (el.classList && el.classList.contains("custom-dropdown")) {
+            clearDropdown(el);
+            // Refill options nếu có trong config
+            if (fieldConfig && fieldConfig.type === "select" && fieldConfig.options) {
+              const placeholder = fieldConfig.placeholder || "Chọn";
+              clearDropdown(el, placeholder);
+              (fieldConfig.options || []).forEach(option => {
+                let optionValue, optionText;
+                if (typeof option === "object" && option !== null) {
+                  optionValue = option.value !== undefined ? String(option.value) : String(option);
+                  optionText = option.label !== undefined ? String(option.label) : optionValue;
+                } else {
+                  optionValue = String(option);
+                  optionText = optionValue;
+                }
+                addDropdownOption(el, optionValue, optionText);
+              });
+            }
+          } else {
+            el.value = "";
+          }
+        }
+        const targetEl = (el.classList && el.classList.contains("custom-dropdown")) 
+          ? el.querySelector(".custom-dropdown-button") 
+          : el;
+        if (targetEl) targetEl.classList.remove("error");
+        const fieldDiv = el.closest(".field");
+        if (fieldDiv) {
+          fieldDiv.classList.remove("error");
+        }
+        const label = el.previousElementSibling;
+        if (label && label.tagName === "LABEL") {
+          label.classList.remove("error-label");
+        }
+      });
+
+      // Reset custom fields (cấu trúc: array với title và fields)
+      const custom = CAMPAIGN_CONFIG.fields.custom || [];
+      custom.forEach(section => {
+        const fields = section.fields || [];
+        fields.forEach(field => {
+          // Tìm element - checkbox/radio dùng container với data-field-id
+          let el = $(field.id);
+          if (!el && (field.type === "checkbox" || field.type === "radio")) {
+            // Tìm container bằng data-field-id
+            el = document.querySelector(`.field-options[data-field-id="${field.id}"]`);
+          }
+          
+          if (el) {
+            if (el.classList && el.classList.contains("custom-dropdown")) {
+              clearDropdown(el);
+              // Refill options nếu có trong config
+              if (field.type === "select" && field.options) {
+                const placeholder = field.placeholder || "Chọn";
+                clearDropdown(el, placeholder);
+                (field.options || []).forEach(option => {
+                  let optionValue, optionText;
+                  if (typeof option === "object" && option !== null) {
+                    optionValue = option.value !== undefined ? String(option.value) : String(option);
+                    optionText = option.label !== undefined ? String(option.label) : optionValue;
+                  } else {
+                    optionValue = String(option);
+                    optionText = optionValue;
+                  }
+                  addDropdownOption(el, optionValue, optionText);
+                });
+              }
+            } else if (el.classList && el.classList.contains("field-options")) {
+              // Reset checkbox or radio group - XỬ LÝ RIÊNG
+              el.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+                input.checked = false;
+                input.classList.remove("error");
+                // Trigger change event để đảm bảo UI được update
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+              });
+              // KHÔNG reset error-label cho option labels vì không apply error cho chúng
+              
+              // Reset label chính của checkbox/radio
+              const fieldDiv = el.closest(".field");
+              if (fieldDiv) {
+                fieldDiv.classList.remove("error");
+                const mainLabel = fieldDiv.querySelector('label:first-of-type');
+                if (mainLabel && !mainLabel.closest(".field-option")) {
+                  mainLabel.classList.remove("error-label");
+                  mainLabel.style.color = "";
+                  mainLabel.style.fontWeight = "";
+                }
+              }
+            } else {
+              el.value = "";
+              const targetEl = el;
+              if (targetEl) targetEl.classList.remove("error");
+              const fieldDiv = el.closest(".field");
+              if (fieldDiv) {
+                fieldDiv.classList.remove("error");
+              }
+              const label = el.previousElementSibling;
+              if (label && label.tagName === "LABEL" && !label.closest(".field-option")) {
+                label.classList.remove("error-label");
+              }
+            }
+          }
+        });
+      });
+
+      setStatus("");
+      const submitText = $("submitText");
+      if (submitText) {
+        const defaultText = CAMPAIGN_CONFIG.metadata?.submitButtonText || "Gửi thông tin";
+        submitText.textContent = defaultText;
+      }
+      const submitBtn = $("submitBtn");
+      if (submitBtn) submitBtn.disabled = false;
+      isSubmitting = false;
+    }
+
+    // ======= INITIALIZATION =======
+    async function init() {
+      try {
+        // Load campaign config
+        const campaignUrl = getCampaignJsonUrl();
+        const campaignRes = await fetch(campaignUrl);
+        if (!campaignRes.ok) {
+          throw new Error(`Không tải được dữ liệu: ${campaignRes.status}`);
+        }
+        CAMPAIGN_CONFIG = await campaignRes.json();
+
+        // Check if campaign is enabled
+        if (CAMPAIGN_CONFIG.enabled === false) {
+          const disabledMsg = CAMPAIGN_CONFIG.metadata?.disabledMessage || "Chiến dịch này hiện đang tắt.";
+          showError(disabledMsg);
+          return;
+        }
+
+        // Apply theme
+        if (CAMPAIGN_CONFIG.theme) {
+          applyTheme(CAMPAIGN_CONFIG.theme);
+        }
+
+        // Update page title (hiển thị trên tab trình duyệt)
+        if (CAMPAIGN_CONFIG.metadata && CAMPAIGN_CONFIG.metadata.pageTitle) {
+          document.title = CAMPAIGN_CONFIG.metadata.pageTitle;
+        }
+
+        // Update hero section
+        if (CAMPAIGN_CONFIG.metadata) {
+          const heroEl = $("campaignHero");
+          const titleEl = $("campaignTitle");
+          const descEl = $("campaignDesc");
+          const imgEl = $("campaignImage");
+          
+          if (titleEl && CAMPAIGN_CONFIG.metadata.heroTitle) {
+            titleEl.textContent = CAMPAIGN_CONFIG.metadata.heroTitle;
+          }
+          if (descEl && CAMPAIGN_CONFIG.metadata.description) {
+            descEl.textContent = CAMPAIGN_CONFIG.metadata.description;
+          }
+          if (imgEl && CAMPAIGN_CONFIG.metadata.image) {
+            imgEl.src = CAMPAIGN_CONFIG.metadata.image;
+            imgEl.alt = CAMPAIGN_CONFIG.metadata.title || "Chiến dịch";
+          }
+          
+          // Set background image and styles
+          if (heroEl && CAMPAIGN_CONFIG.metadata.background) {
+            heroEl.style.backgroundImage = `url(${CAMPAIGN_CONFIG.metadata.background})`;
+            // Set height from theme config if provided
+            if (CAMPAIGN_CONFIG.theme?.backgroundHeight) {
+              heroEl.style.height = CAMPAIGN_CONFIG.theme.backgroundHeight;
+            }
+            // Set border radius from theme config if provided
+            if (CAMPAIGN_CONFIG.theme?.heroBorderRadius) {
+              heroEl.style.borderRadius = CAMPAIGN_CONFIG.theme.heroBorderRadius;
+            }
+          } else if (heroEl && CAMPAIGN_CONFIG.theme?.heroBorderRadius) {
+            // Apply border radius even if no background image
+            heroEl.style.borderRadius = CAMPAIGN_CONFIG.theme.heroBorderRadius;
+          }
+        }
+
+        // Load administrative data
+        const adminUrl = CAMPAIGN_CONFIG.config?.adminDataUrl || "../../shared/administrative-unit-data.json";
+        const adminRes = await fetch(adminUrl, { cache: "force-cache" });
+        if (!adminRes.ok) {
+          throw new Error(`Không tải được dữ liệu đơn vị hành chính: ${adminRes.status}`);
+        }
+        ADMIN_DATA = await adminRes.json();
+        buildIndexes(ADMIN_DATA);
+
+        // Load Zalo links CSV
+        const zaloUrl = CAMPAIGN_CONFIG.config?.zaloLinksUrl || "../../shared/unit_zalo_group.csv";
+        const zaloRes = await fetch(zaloUrl, { cache: "force-cache" });
+        if (zaloRes.ok) {
+          const csvText = await zaloRes.text();
+          parseZaloCSV(csvText);
+        }
+
+        // Render form
+        renderForm();
+
+        // Setup global click listener to close dropdowns
+        document.addEventListener("click", (e) => {
+          if (!e.target.closest(".custom-dropdown")) {
+            closeAllDropdowns();
+          }
+        });
+
+        // Show content
+        $("loadingMessage").style.display = "none";
+        $("campaignContent").style.display = "block";
+
+        // Setup submit handler
+        const submitBtn = $("submitBtn");
+        if (submitBtn) {
+          submitBtn.addEventListener("click", handleSubmit);
+        }
+
+        // Setup new submit handler
+        const newSubmitBtn = $("newSubmitBtn");
+        if (newSubmitBtn) {
+          // Set button text from config
+          const newSubmitText = CAMPAIGN_CONFIG.metadata?.newSubmitButtonText || "Gửi thông tin khác";
+          newSubmitBtn.textContent = newSubmitText;
+          
+          newSubmitBtn.addEventListener("click", () => {
+            resetForm();
+            showFormCard();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        }
+        
+        // Set submit button text from config
+        const submitTextEl = $("submitText");
+        if (submitTextEl && CAMPAIGN_CONFIG.metadata?.submitButtonText) {
+          submitTextEl.textContent = CAMPAIGN_CONFIG.metadata.submitButtonText;
+        }
+
+        // Set copyright text from config
+        const copyrightEl = $("copyright");
+        if (copyrightEl && CAMPAIGN_CONFIG.metadata?.copyright) {
+          copyrightEl.textContent = CAMPAIGN_CONFIG.metadata.copyright;
+        }
+
+        // Set result title from config
+        const resultTitleEl = $("resultTitle");
+        if (resultTitleEl) {
+          const resultTitle = CAMPAIGN_CONFIG.metadata?.resultTitle || "🎉 Đã nhận thông tin";
+          resultTitleEl.textContent = resultTitle;
+        }
+
+      } catch (err) {
+        console.error(err);
+        $("loadingMessage").style.display = "none";
+        showError(err.message || "Đã xảy ra lỗi khi tải trang. Vui lòng thử lại.");
+      }
+    }
+
+    async function handleSubmit() {
+      if (isSubmitting) return;
+
+      if (!validateForm()) {
+        setStatus("Vui lòng điền đầy đủ các ô đánh dấu đỏ.", "var(--danger)");
+        return;
+      }
+
+      isSubmitting = true;
+      const submitBtn = $("submitBtn");
+      const submitText = $("submitText");
+      
+      if (submitBtn) submitBtn.disabled = true;
+      if (submitText) submitText.innerHTML = '<span class="spinner"></span> Đang gửi...';
+      
+      const payload = collectFormData();
+      
+      // Lấy IP address
+      setStatus("Đang lấy thông tin...");
+      payload.ip_address = await getUserIP();
+      
+      const scriptUrl = CAMPAIGN_CONFIG.config?.scriptUrl;
+
+      if (!scriptUrl) {
+        setStatus("Chưa cấu hình URL Google Apps Script.", "var(--danger)");
+        if (submitBtn) submitBtn.disabled = false;
+        if (submitText) submitText.textContent = "Gửi lại";
+        isSubmitting = false;
+        return;
+      }
+
+      try {
+        setStatus("Đang gửi dữ liệu...");
+        const resp = await fetch(scriptUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await resp.json().catch(() => ({}));
+
+        if (resp.ok && data?.success) {
+          setStatus("");
+          if (submitText) submitText.textContent = "Đã gửi ✔";
+          renderReceipt(data.echo || payload, data.submitted_at_iso);
+          showResultCard();
+        } else {
+          setStatus(data?.message || "Đã có lỗi xảy ra. Vui lòng thử lại.", "var(--danger)");
+          if (submitText) submitText.textContent = "Gửi lại";
+          if (submitBtn) submitBtn.disabled = false;
+          isSubmitting = false;
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus("Đã có lỗi xảy ra. Vui lòng thử lại.", "var(--danger)");
+        if (submitText) submitText.textContent = "Gửi lại";
+        if (submitBtn) submitBtn.disabled = false;
+        isSubmitting = false;
+      }
+    }
+
+    // Start initialization
+    init();
+  </script>
+</body>
+</html>
