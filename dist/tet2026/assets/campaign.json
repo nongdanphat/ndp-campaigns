@@ -25,7 +25,9 @@
     "submitButtonText": "Gửi thông tin",
     "newSubmitButtonText": "Gửi thông tin khác",
     "disabledMessage": "Chiến dịch này hiện đang tắt.",
-    "copyright": "© 2025 NDP. Mọi quyền sở hữu và quyền liên quan được bảo lưu."
+    "copyright": "© 2025 NDP. Mọi quyền sở hữu và quyền liên quan được bảo lưu.",
+    "startDate": "20/1/2026",
+    "endDate": "15/3/2026"
   },
   
   "theme": {
