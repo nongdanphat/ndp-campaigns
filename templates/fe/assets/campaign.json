@@ -4,8 +4,8 @@
   
   "config": {
     "scriptUrl": "PASTE_YOUR_GAS_WEB_APP_URL_HERE",
-    "adminDataUrl": "../../shared/administrative-unit-data.json",
-    "zaloLinksUrl": "../../shared/unit_zalo_group.csv",
+    "adminDataUrl": "../shared/administrative-unit-data.json",
+    "zaloLinksUrl": "../shared/unit_zalo_group.csv",
     "allowMultipleSubmissions": true,
     "showReferralInfo": true,
     "showDeviceInfo": true,

@@ -4,8 +4,8 @@
   
   "config": {
     "scriptUrl": "https://script.google.com/macros/s/AKfycbwxFVp6w-ycNBZBs_jdfFzcTluDGrmtQByD6Ub49IqoDrOLXDLj2UaOLEaprfDbrt9t/exec",
-    "adminDataUrl": "../../shared/administrative-unit-data.json",
-    "zaloLinksUrl": "../../shared/unit_zalo_group.csv",
+    "adminDataUrl": "../shared/administrative-unit-data.json",
+    "zaloLinksUrl": "../shared/unit_zalo_group.csv",
     "allowMultipleSubmissions": true,
     "showReferralInfo": true,
     "showDeviceInfo": true,

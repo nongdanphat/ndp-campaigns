@@ -1785,7 +1785,7 @@
         }
 
         // Load administrative data
-        const adminUrl = CAMPAIGN_CONFIG.config?.adminDataUrl || "../../shared/administrative-unit-data.json";
+        const adminUrl = CAMPAIGN_CONFIG.config?.adminDataUrl || "../shared/administrative-unit-data.json";
         const adminRes = await fetch(adminUrl, { cache: "force-cache" });
         if (!adminRes.ok) {
           throw new Error(`Không tải được dữ liệu đơn vị hành chính: ${adminRes.status}`);
@@ -1794,7 +1794,7 @@
         buildIndexes(ADMIN_DATA);
 
         // Load Zalo links CSV
-        const zaloUrl = CAMPAIGN_CONFIG.config?.zaloLinksUrl || "../../shared/unit_zalo_group.csv";
+        const zaloUrl = CAMPAIGN_CONFIG.config?.zaloLinksUrl || "../shared/unit_zalo_group.csv";
         const zaloRes = await fetch(zaloUrl, { cache: "force-cache" });
         if (zaloRes.ok) {
           const csvText = await zaloRes.text();
