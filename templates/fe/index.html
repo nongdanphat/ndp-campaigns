@@ -989,7 +989,12 @@
       adminRow2.appendChild(createFieldElement("hamlet", mandatory.hamlet));
       addressSection.appendChild(adminRow2);
 
-      addressSection.appendChild(createFieldElement("address", mandatory.address));
+      // Street and house number in a row
+      const addressRow = document.createElement("div");
+      addressRow.className = "row";
+      addressRow.appendChild(createFieldElement("street", mandatory.street));
+      addressRow.appendChild(createFieldElement("house_number", mandatory.house_number));
+      addressSection.appendChild(addressRow);
 
       formFieldsEl.appendChild(addressSection);
 

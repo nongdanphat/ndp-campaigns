@@ -19,7 +19,8 @@ const COLUMN_ORDER = [
   "district", // ⚠️ BẮT BUỘC - Không xóa
   "ward", // ⚠️ BẮT BUỘC - Không xóa
   "hamlet", // ⚠️ BẮT BUỘC - Không xóa
-  "address", // ⚠️ BẮT BUỘC - Không xóa,
+  "street", // ⚠️ BẮT BUỘC - Không xóa,
+  "house_number", // ⚠️ BẮT BUỘC - Không xóa,
   "referral", // ⚠️ BẮT BUỘC - Không xóa,
   "device", // ⚠️ BẮT BUỘC - Không xóa,
   "ip_address", // ⚠️ BẮT BUỘC - Không xóa,

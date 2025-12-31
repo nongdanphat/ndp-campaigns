@@ -53,12 +53,6 @@
         "placeholder": "VD: 0912 345 678",
         "required": true
       },
-      "address": {
-        "label": "Địa chỉ",
-        "type": "text",
-        "placeholder": "Số nhà, tên đường",
-        "required": true
-      },
       "province": {
         "label": "Tỉnh / Thành phố",
         "type": "select",
@@ -82,6 +76,18 @@
         "type": "text",
         "placeholder": "VD: Thôn Phú Long / Ấp Tân Hiệp 2 / Tổ 5 KP 3",
         "required": true
+      },
+      "street": {
+        "label": "Đường",
+        "type": "text",
+        "placeholder": "Tên đường (Nếu có)",
+        "required": false
+      },
+      "house_number": {
+        "label": "Số nhà",
+        "type": "text",
+        "placeholder": "Số nhà (Nếu có)",
+        "required": false
       }
     },
     "custom": [
