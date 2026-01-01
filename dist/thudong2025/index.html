@@ -913,7 +913,24 @@
         // Check nếu là province dropdown để loại bỏ "Tỉnh " ở đầu
         const isProvince = dropdown.id === "province";
 
-        (list || []).forEach((item) => {
+        // Sắp xếp danh sách từ A-Z nếu là province dropdown
+        let sortedList = list || [];
+        if (isProvince && sortedList.length > 0) {
+          sortedList = [...sortedList].sort((a, b) => {
+            let textA = a.name || a.label || String(a);
+            let textB = b.name || b.label || String(b);
+            // Loại bỏ "Tỉnh " ở đầu để sắp xếp
+            if (textA.startsWith("Tỉnh ")) {
+              textA = textA.substring(5);
+            }
+            if (textB.startsWith("Tỉnh ")) {
+              textB = textB.substring(5);
+            }
+            return textA.localeCompare(textB, "vi");
+          });
+        }
+
+        sortedList.forEach((item) => {
           const opt = document.createElement("button");
           opt.type = "button";
           opt.className = "admin-dropdown-option";
