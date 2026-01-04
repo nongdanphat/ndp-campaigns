@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Nông Dân Phát – Webform Campaign</title>
 
+    <!-- Inter Font -->
+    <link rel="stylesheet" href="../shared/fonts/inter-fonts.css" />
+
     <style>
       :root {
         --bg: #f3f4f6;
@@ -20,10 +23,119 @@
       }
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
         background: var(--bg);
         color: #0f172a;
+      }
+      /* Header Styles */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .header-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        position: relative;
+      }
+      .header-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 4rem;
+        position: relative;
+      }
+      .header-logo {
+        position: absolute;
+        left: 1rem;
+        z-index: 10;
+      }
+      .header-logo a {
+        font-size: 1.25rem;
+        font-weight: 700;
+        background: linear-gradient(to right, #ab7e31, #be8f2b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-decoration: none;
+      }
+      .desktop-nav {
+        display: none;
+      }
+      @media (min-width: 1024px) {
+        .desktop-nav {
+          display: flex;
+          align-items: center;
+          gap: 2rem;
+        }
+      }
+      .desktop-nav a {
+        color: #374151;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .desktop-nav a:hover {
+        color: #ab7e31;
+      }
+      .mobile-menu-button {
+        display: block;
+        position: absolute;
+        right: 1rem;
+        padding: 0.5rem;
+        border-radius: 0.375rem;
+        color: #374151;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        width: auto;
+        min-width: auto;
+        flex-shrink: 0;
+        z-index: 10;
+      }
+      .mobile-menu-button:hover {
+        background-color: #fadc7c;
+      }
+      @media (min-width: 1024px) {
+        .mobile-menu-button {
+          display: none;
+        }
+      }
+      .mobile-menu-button svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      .mobile-menu {
+        display: none;
+        padding-bottom: 1rem;
+      }
+      .mobile-menu.show {
+        display: block;
+      }
+      @media (min-width: 1024px) {
+        .mobile-menu {
+          display: none !important;
+        }
+      }
+      .mobile-menu .menu-items {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .mobile-menu a {
+        padding: 0.5rem 1rem;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 0.75rem;
+        transition: background-color 0.2s;
+      }
+      .mobile-menu a:hover {
+        background-color: #fadc7c;
       }
       .page {
         max-width: 760px;
@@ -543,6 +655,84 @@
     </style>
   </head>
   <body>
+    <!-- Header -->
+    <header>
+      <nav class="header-container">
+        <div class="header-nav">
+          <!-- Logo -->
+          <div class="header-logo">
+            <a href="https://nongdanphat.github.io/ndp-website/index.html"
+              >NDP</a
+            >
+          </div>
+
+          <!-- Desktop Navigation -->
+          <div class="desktop-nav">
+            <a href="https://nongdanphat.github.io/ndp-website/index.html"
+              >Trang chủ</a
+            >
+            <a
+              href="https://nongdanphat.github.io/ndp-website/insights/index.html"
+              >Chia sẻ & Xin ý kiến</a
+            >
+            <a
+              href="https://nongdanphat.github.io/ndp-website/campaigns/index.html"
+              >Chiến dịch & Chương trình</a
+            >
+            <a
+              href="https://nongdanphat.github.io/ndp-website/join-us/index.html"
+              >Tuyển dụng & Đồng hành</a
+            >
+            <a
+              href="https://nongdanphat.github.io/ndp-website/contact/index.html"
+              >Liên hệ</a
+            >
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <button
+            class="mobile-menu-button"
+            id="mobile-menu-button"
+            aria-label="Toggle menu"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="mobile-menu" id="mobile-menu">
+          <div class="menu-items">
+            <a href="https://nongdanphat.github.io/ndp-website/index.html"
+              >Trang chủ</a
+            >
+            <a
+              href="https://nongdanphat.github.io/ndp-website/insights/index.html"
+              >Chia sẻ & Xin ý kiến</a
+            >
+            <a
+              href="https://nongdanphat.github.io/ndp-website/campaigns/index.html"
+              >Chiến dịch & Chương trình</a
+            >
+            <a
+              href="https://nongdanphat.github.io/ndp-website/join-us/index.html"
+              >Tuyển dụng & Đồng hành</a
+            >
+            <a
+              href="https://nongdanphat.github.io/ndp-website/contact/index.html"
+              >Liên hệ</a
+            >
+          </div>
+        </div>
+      </nav>
+    </header>
+
     <div class="page">
       <div id="loadingMessage" class="loading">Đang tải biểu mẫu...</div>
 
@@ -2540,6 +2730,18 @@
 
       // Start initialization
       init();
+
+      // Mobile menu toggle
+      (function () {
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        if (mobileMenuButton && mobileMenu) {
+          mobileMenuButton.addEventListener("click", function () {
+            mobileMenu.classList.toggle("show");
+          });
+        }
+      })();
     </script>
   </body>
 </html>

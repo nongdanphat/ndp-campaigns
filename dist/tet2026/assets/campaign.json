@@ -74,7 +74,7 @@
       "hamlet": {
         "label": "Thôn / Ấp / Tổ dân phố",
         "type": "text",
-        "placeholder": "VD: Thôn Phú Long / Ấp Tân Hiệp 2 / Tổ 5 KP 3",
+        "placeholder": "VD: Thôn A / Ấp B / Tổ 5 KP 3",
         "required": true
       },
       "street": {

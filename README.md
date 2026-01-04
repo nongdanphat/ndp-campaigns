@@ -7,16 +7,8 @@ Triển khai: **Cloudflare Pages** + **Google Apps Script**.
 
 ```
 ndp-campaigns/
-├── templates/              # Template dùng chung
-│   ├── fe/                 # Frontend template
-│   │   ├── index.html
-│   │   ├── assets/
-│   │   │   ├── campaign.json
-│   │   │   ├── background.png
-│   │   │   └── logo.png
-│   │   └── _headers
-│   └── gas/                # Google Apps Script template
-│       └── Code.gs
+├── gas/                    # Google Apps Script template
+│   └── Code.gs
 │
 ├── shared/                 # Dữ liệu dùng chung
 │   ├── administrative-unit-data.json
@@ -36,16 +28,15 @@ ndp-campaigns/
 
 ## 🚀 Tạo chiến dịch mới
 
-### 1. Copy template
+### 1. Tạo thư mục chiến dịch
 
 ```bash
 # Tạo thư mục
 mkdir dist/ten-chien-dich
 mkdir dist/ten-chien-dich/assets
-
-# Copy template (Windows PowerShell)
-Copy-Item templates/fe/* dist/ten-chien-dich/ -Recurse
 ```
+
+Sau đó tạo các file cần thiết (index.html, campaign.json, _headers, assets/background.png, assets/logo.png) hoặc copy từ một chiến dịch có sẵn.
 
 ### 2. Cấu hình campaign.json
 
@@ -58,6 +49,14 @@ Mở `dist/ten-chien-dich/assets/campaign.json` và sửa:
 ### 3. Thêm logo
 
 Đặt logo vào `dist/ten-chien-dich/assets/logo.png`
+
+### 4. Thiết lập Google Apps Script
+
+Copy file `gas/Code.gs` vào Google Apps Script project mới và cấu hình:
+- Tạo Google Sheet để lưu dữ liệu
+- Cập nhật `SPREADSHEET_ID` trong `Code.gs`
+- Cập nhật `COLUMN_ORDER` nếu có custom fields
+- Deploy và lấy URL để cập nhật vào `campaign.json` → `config.scriptUrl`
 
 ## ⚠️ CẢNH BÁO QUAN TRỌNG
 
