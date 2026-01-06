@@ -1,5 +1,5 @@
 {
-  "campaign_id": "chien-dich-mau",
+  "campaign_id": "nong-nghiep-ben-vung",
   "enabled": true,
   
   "config": {
@@ -11,21 +11,26 @@
     "showDeviceInfo": true,
     "zalo": {
       "enabled": true,
-      "title": "Tham gia nhóm Zalo",
-      "description": "Vui lòng tham gia nhóm Zalo để nhận được hỗ trợ tốt nhất."
+      "title": "Tham gia nhóm Zalo hỗ trợ nông dân",
+      "description": "Nhận thông báo mới, hướng dẫn kỹ thuật và trao đổi trực tiếp với cán bộ hỗ trợ."
+    },
+    "callForAction": {
+      "enabled": true,
+      "title": "Nhiều chương trình hỗ trợ khác đang được chuẩn bị",
+      "description": "Trong thời gian tới, Nông Dân Phát sẽ triển khai thêm nhiều chiến dịch và chương trình hỗ trợ nông dân trên nhiều lĩnh vực khác nhau như ứng dụng công nghệ, canh tác bền vững, đào tạo kỹ thuật và kết nối tiêu thụ sản phẩm."
     }
   },
   
   "metadata": {
     "pageTitle": "NDP-Nông Dân Phát",
-    "heroTitle": "Chiến dịch Tết 2026",
-    "description": "Vui lòng điền thông tin chính xác để chúng tôi kết nối và hỗ trợ bạn tốt hơn.",
+    "heroTitle": "Đăng ký tham gia chiến dịch phát triển nông nghiệp bền vững",
+    "description": "Chúng tôi mong muốn đồng hành cùng nông dân trong việc áp dụng các phương pháp canh tác thân thiện môi trường, nâng cao hiệu quả lâu dài và ổn định thu nhập.",
     "image": "./assets/logo.png",
     "background": "./assets/background.png",
     "submitButtonText": "Gửi thông tin",
     "newSubmitButtonText": "Gửi thông tin khác",
     "disabledMessage": "Chiến dịch này hiện đang tắt.",
-    "copyright": "© 2025 NDP. Mọi quyền sở hữu và quyền liên quan được bảo lưu.",
+    "copyright": "© 2026 Nông Dân Phát. Mọi quyền được bảo lưu.",
     "startDate": "20/1/2026",
     "endDate": "15/3/2026"
   },
@@ -92,35 +97,43 @@
     },
     "custom": [
       {
-        "title": "Mẫu thông tin 1",
+        "title": "Thông tin canh tác & định hướng phát triển",
         "fields": [
           {
             "id": "example_input_field",
-            "label": "Nhập thông tin mẫu",
+            "label": "Loại cây trồng / vật nuôi chính",
             "type": "text",
-            "placeholder": "VD: Nhập thông tin",
+            "placeholder": "VD: Lúa, rau màu, cà phê, chăn nuôi heo…",
+            "required": false
+          },
+          {
+            "id": "example_number_field",
+            "label": "Số năm kinh nghiệm canh tác (năm)",
+            "type": "number",
+            "placeholder": "VD: 5",
             "required": false
           },
           {
             "id": "example_checkbox",
-            "label": "Sở thích",
+            "label": "Phương pháp quan tâm",
             "type": "checkbox",
             "required": true,
             "options": [
-              "Đọc sách",
-              "Nghe nhạc",
-              "Xem phim",
-              "Du lịch"
+              "Canh tác hữu cơ",
+              "Giảm phân thuốc hóa học",
+              "Tái sử dụng phụ phẩm nông nghiệp",
+              "Bảo vệ đất & nguồn nước"
             ]
           },
           {
             "id": "example_select",
-            "label": "Lựa chọn mẫu",
+            "label": "Mục tiêu tham gia chiến dịch",
             "type": "select",
             "required": true,
             "options": [
-              "Lựa chọn mẫu 1",
-              "Lựa chọn mẫu 2"
+              "Nâng cao năng suất",
+              "Bảo vệ môi trường",
+              "Ổn định đầu ra"
             ]
           },
           {
@@ -136,9 +149,9 @@
           },
           {
             "id": "example_textarea",
-            "label": "Ghi chú",
+            "label": "Mong muốn hỗ trợ từ chương trình",
             "type": "textarea",
-            "placeholder": "VD: Nhập ghi chú của bạn...",
+            "placeholder": "VD: Đào tạo kỹ thuật, kết nối chuyên gia, hỗ trợ mô hình mẫu…",
             "rows": 4,
             "required": false
           }

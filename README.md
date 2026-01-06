@@ -45,6 +45,12 @@ Mở `dist/ten-chien-dich/assets/campaign.json` và sửa:
 - `config.scriptUrl` → URL Google Apps Script (bắt buộc)
 - `metadata.*` → Thông tin chiến dịch
 - `fields.custom` → Thêm custom fields nếu cần
+- `config.zalo.enabled` → Bật/tắt hiển thị card Zalo (mặc định: `true`)
+- `config.zalo.title` → Tiêu đề card Zalo
+- `config.zalo.description` → Mô tả card Zalo
+- `config.callForAction.enabled` → Bật/tắt hiển thị card Kêu gọi hành động (mặc định: `true`)
+- `config.callForAction.title` → Tiêu đề card Kêu gọi
+- `config.callForAction.description` → Mô tả card Kêu gọi
 
 ### 3. Thêm logo
 
@@ -57,6 +63,11 @@ Copy file `gas/Code.gs` vào Google Apps Script project mới và cấu hình:
 - Cập nhật `SPREADSHEET_ID` trong `Code.gs`
 - Cập nhật `COLUMN_ORDER` nếu có custom fields
 - Deploy và lấy URL để cập nhật vào `campaign.json` → `config.scriptUrl`
+
+### 5. Xem dữ liệu đã submit
+
+Tất cả dữ liệu đã submit được lưu tại Google Sheet:
+📊 [Xem dữ liệu đã submit](https://docs.google.com/spreadsheets/d/1bMZkWsOg2FkNzO0ZG3TBx4W2hn9kVtBAy487WtcwKlc/edit?gid=261087324#gid=261087324)
 
 ## ⚠️ CẢNH BÁO QUAN TRỌNG
 
@@ -183,3 +194,43 @@ Cấu trúc: `fields.custom` là **array** các section, mỗi section có `titl
 - Sau khi thêm custom fields vào `campaign.json`, **bắt buộc** phải thêm các field ID vào `COLUMN_ORDER` trong `Code.gs`
 - Thứ tự trong `COLUMN_ORDER` = thứ tự cột trong Google Sheet
 - Tất cả các cột trong `COLUMN_ORDER` phải được tạo sẵn trên Sheet với ID tương ứng
+
+## 🔧 Cấu hình Zalo và Call for Action
+
+### Bật/tắt Zalo Card
+
+Card Zalo sẽ hiển thị sau khi người dùng submit form thành công. Cấu hình trong `campaign.json`:
+
+```json
+"config": {
+  "zalo": {
+    "enabled": true,
+    "title": "Tham gia nhóm Zalo",
+    "description": "Vui lòng tham gia nhóm Zalo để nhận được hỗ trợ tốt nhất."
+  }
+}
+```
+
+**Lưu ý:**
+- `enabled: true` → Hiển thị card Zalo (mặc định)
+- `enabled: false` → Ẩn card Zalo
+- Nếu có `zalo_link` trong dữ liệu, link sẽ được hiển thị trong card
+- Nếu không có `zalo_link`, card vẫn hiển thị nhưng không có link
+
+### Bật/tắt Call for Action Card (Kêu gọi hành động)
+
+Card Call for Action hiển thị thông điệp kêu gọi người dùng liên hệ hoặc thực hiện hành động. Cấu hình trong `campaign.json`:
+
+```json
+"config": {
+  "callForAction": {
+    "enabled": true,
+    "title": "Liên hệ tư vấn",
+    "description": "Vui lòng liên hệ để được tư vấn và hỗ trợ tốt nhất."
+  }
+}
+```
+
+**Lưu ý:**
+- `enabled: true` → Hiển thị card Call for Action (mặc định)
+- `enabled: false` → Ẩn card Call for Action

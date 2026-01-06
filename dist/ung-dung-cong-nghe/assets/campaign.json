@@ -1,5 +1,5 @@
 {
-  "campaign_id": "chien-dich-mau",
+  "campaign_id": "ung-dung-cong-nghe",
   "enabled": true,
   
   "config": {
@@ -11,23 +11,29 @@
     "showDeviceInfo": true,
     "zalo": {
       "enabled": true,
-      "title": "Tham gia nhóm Zalo",
-      "description": "Vui lòng tham gia nhóm Zalo để nhận được hỗ trợ tốt nhất."
+      "title": "Tham gia nhóm Zalo hỗ trợ nông dân",
+      "description": "Nhận thông báo mới, hướng dẫn kỹ thuật và trao đổi trực tiếp với cán bộ hỗ trợ."
+    },
+    "callForAction": {
+      "enabled": true,
+      "title": "Nhiều chương trình hỗ trợ khác đang được chuẩn bị",
+      "description": "Trong thời gian tới, Nông Dân Phát sẽ triển khai thêm nhiều chiến dịch và chương trình hỗ trợ nông dân trên nhiều lĩnh vực khác nhau như ứng dụng công nghệ, canh tác bền vững, đào tạo kỹ thuật và kết nối tiêu thụ sản phẩm."
     }
   },
   
   "metadata": {
     "pageTitle": "NDP-Nông Dân Phát",
-    "heroTitle": "Chiến dịch Thu Đông",
-    "description": "Vui lòng điền thông tin chính xác để chúng tôi kết nối và hỗ trợ bạn tốt hơn.",
+    "heroTitle": "Đăng ký tham gia chương trình ứng dụng công nghệ nông nghiệp",
+    "description": "Vui lòng cung cấp thông tin chính xác để chúng tôi tư vấn, kết nối và hỗ trợ bạn tiếp cận các giải pháp công nghệ phù hợp với mô hình sản xuất hiện tại.",
     "image": "./assets/logo.png",
     "background": "./assets/background.png",
     "submitButtonText": "Gửi thông tin",
     "newSubmitButtonText": "Gửi thông tin khác",
     "disabledMessage": "Chiến dịch này hiện đang tắt.",
-    "copyright": "© 2025 NDP. Mọi quyền sở hữu và quyền liên quan được bảo lưu.",
-    "startDate": "1/6/2025",
-    "endDate": "31/12/2025"
+    "copyright": "© 2026 Nông Dân Phát. Mọi quyền được bảo lưu.",
+    "startDate": "20/1/2026",
+    "endDate": "15/3/2026",
+    "resultTitle": "Đã gửi thông tin thành công"
   },
   
   "theme": {
@@ -92,35 +98,43 @@
     },
     "custom": [
       {
-        "title": "Mẫu thông tin 1",
+        "title": "Thông tin mô hình & nhu cầu hỗ trợ",
         "fields": [
           {
             "id": "example_input_field",
-            "label": "Nhập thông tin mẫu",
+            "label": "Mô hình sản xuất hiện tại",
             "type": "text",
-            "placeholder": "VD: Nhập thông tin",
+            "placeholder": "VD: Trồng rau, chăn nuôi gia cầm, cây ăn trái…",
+            "required": false
+          },
+          {
+            "id": "example_number_field",
+            "label": "Diện tích (m2)",
+            "type": "number",
+            "placeholder": "VD: 3000",
             "required": false
           },
           {
             "id": "example_checkbox",
-            "label": "Sở thích",
+            "label": "Lĩnh vực quan tâm",
             "type": "checkbox",
             "required": true,
             "options": [
-              "Đọc sách",
-              "Nghe nhạc",
-              "Xem phim",
-              "Du lịch"
+              "Ứng dụng IoT / cảm biến",
+              "Quản lý mùa vụ & sản lượng",
+              "Tưới tiêu – tiết kiệm nước",
+              "Truy xuất nguồn gốc"
             ]
           },
           {
             "id": "example_select",
-            "label": "Lựa chọn mẫu",
+            "label": "Mức độ sẵn sàng áp dụng công nghệ",
             "type": "select",
             "required": true,
             "options": [
-              "Lựa chọn mẫu 1",
-              "Lựa chọn mẫu 2"
+              "Chưa áp dụng",
+              "Đang tìm hiểu",
+              "Đã áp dụng một phần"
             ]
           },
           {
@@ -136,9 +150,9 @@
           },
           {
             "id": "example_textarea",
-            "label": "Ghi chú",
+            "label": "Nhu cầu cụ thể hoặc khó khăn đang gặp phải",
             "type": "textarea",
-            "placeholder": "VD: Nhập ghi chú của bạn...",
+            "placeholder": "VD: Thiếu nhân công, chi phí cao, khó quản lý…",
             "rows": 4,
             "required": false
           }

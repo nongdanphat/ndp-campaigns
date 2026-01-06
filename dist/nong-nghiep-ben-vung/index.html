@@ -156,6 +156,16 @@
         position: relative;
         overflow: hidden;
       }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 0;
+      }
       .hero-content {
         display: flex;
         flex-direction: column;
@@ -187,7 +197,8 @@
       .hero-title {
         font-weight: 700;
         font-size: 1.5rem;
-        margin-bottom: 1rem;
+        max-width: 30rem;
+        margin: 2rem auto;
         color: white;
       }
       .hero-desc {
@@ -791,6 +802,16 @@
           <div id="zaloLink" class="muted"></div>
         </div>
 
+        <!-- CALL FOR ACTION CARD -->
+        <div class="card" id="callForActionCard" style="display: none">
+          <div class="form-title" id="callForActionTitle"></div>
+          <div
+            id="callForActionDescription"
+            class="muted"
+            style="margin-bottom: 1rem"
+          ></div>
+        </div>
+
         <!-- COPYRIGHT -->
         <div id="copyright" class="copyright"></div>
       </div>
@@ -904,7 +925,8 @@
       function setDropdownValue(dropdown, value, text) {
         const button = dropdown.querySelector(".custom-dropdown-button");
         const textSpan = button.querySelector(".dropdown-text");
-        if (value && text) {
+        // Kiểm tra value và text một cách rõ ràng hơn (value có thể là "0" nên cần check !== "")
+        if (value !== undefined && value !== null && value !== "" && text) {
           textSpan.textContent = text;
           textSpan.classList.remove("placeholder");
           dropdown.dataset.value = value;
@@ -932,6 +954,11 @@
 
       function fillDropdown(dropdown, list, placeholder = "Chọn") {
         const panel = dropdown.querySelector(".custom-dropdown-panel");
+
+        // Lưu giá trị hiện tại để kiểm tra xem có còn trong danh sách mới không
+        const currentValue = getDropdownValue(dropdown);
+        let currentValueExists = false;
+
         panel.innerHTML = "";
         dropdown.dataset.placeholder = placeholder;
 
@@ -941,6 +968,12 @@
           opt.className = "custom-dropdown-option";
           const value = String(item.code || item.value || item);
           const text = item.name || item.label || String(item);
+
+          // Kiểm tra xem giá trị hiện tại có trong danh sách mới không
+          if (currentValue && value === currentValue) {
+            currentValueExists = true;
+          }
+
           opt.dataset.value = value;
           opt.textContent = text;
 
@@ -956,8 +989,8 @@
           panel.appendChild(opt);
         });
 
-        // Set placeholder if no value selected
-        if (!getDropdownValue(dropdown)) {
+        // Nếu giá trị hiện tại không còn trong danh sách mới, hoặc không có giá trị, thì reset về placeholder
+        if (!currentValue || !currentValueExists) {
           setDropdownValue(dropdown, "", "");
         }
       }
@@ -1070,7 +1103,8 @@
       function setAdminDropdownValue(dropdown, value, text) {
         const button = dropdown.querySelector(".custom-dropdown-button");
         const textSpan = button.querySelector(".dropdown-text");
-        if (value && text) {
+        // Kiểm tra value và text một cách rõ ràng hơn (value có thể là "0" nên cần check !== "")
+        if (value !== undefined && value !== null && value !== "" && text) {
           textSpan.textContent = text;
           textSpan.classList.remove("placeholder");
           dropdown.dataset.value = value;
@@ -1096,6 +1130,10 @@
         const searchInput = dropdown.querySelector(
           ".admin-dropdown-search input"
         );
+
+        // Lưu giá trị hiện tại để kiểm tra xem có còn trong danh sách mới không
+        const currentValue = getAdminDropdownValue(dropdown);
+        let currentValueExists = false;
 
         optionsContainer.innerHTML = "";
         dropdown.dataset.placeholder = placeholder;
@@ -1127,6 +1165,11 @@
           const value = String(item.code || item.value || item);
           let text = item.name || item.label || String(item);
 
+          // Kiểm tra xem giá trị hiện tại có trong danh sách mới không
+          if (currentValue && value === currentValue) {
+            currentValueExists = true;
+          }
+
           // Loại bỏ "Tỉnh " ở đầu nếu là province dropdown
           let displayText = text;
           if (isProvince && text.startsWith("Tỉnh ")) {
@@ -1157,8 +1200,8 @@
           optionsContainer.appendChild(opt);
         });
 
-        // Set placeholder if no value selected
-        if (!getAdminDropdownValue(dropdown)) {
+        // Nếu giá trị hiện tại không còn trong danh sách mới, hoặc không có giá trị, thì reset về placeholder
+        if (!currentValue || !currentValueExists) {
           setAdminDropdownValue(dropdown, "", "");
         }
       }
@@ -1697,20 +1740,25 @@
             });
           });
 
-        // Xử lý custom dropdown - cần listen vào option click
+        // Xử lý custom dropdown - listen vào change event (được dispatch khi chọn option)
         document.querySelectorAll(".custom-dropdown").forEach((dropdown) => {
           const fieldId = dropdown.id;
-          const panel = dropdown.querySelector(".custom-dropdown-panel");
-          if (panel) {
-            panel.addEventListener("click", function (e) {
-              if (e.target.classList.contains("custom-dropdown-option")) {
-                const fieldDiv = dropdown.closest(".field");
-                if (fieldDiv && fieldDiv.classList.contains("error")) {
-                  clearFieldError(fieldId, "select");
-                }
+          dropdown.addEventListener("change", function () {
+            const fieldDiv = dropdown.closest(".field");
+            if (fieldDiv && fieldDiv.classList.contains("error")) {
+              // Kiểm tra xem có giá trị được chọn không
+              let hasValue = false;
+              if (dropdown.classList.contains("admin-dropdown")) {
+                hasValue = !!getAdminDropdownValue(dropdown);
+              } else {
+                hasValue = !!getDropdownValue(dropdown);
               }
-            });
-          }
+              // Chỉ clear error nếu có giá trị được chọn
+              if (hasValue) {
+                clearFieldError(fieldId, "select");
+              }
+            }
+          });
         });
 
         // Xử lý checkbox và radio
@@ -1785,6 +1833,10 @@
 
         if (!provinceEl || !districtEl || !wardEl) return;
 
+        // Lưu giá trị cũ để so sánh
+        let previousProvinceValue = "";
+        let previousDistrictValue = "";
+
         // Province dùng admin dropdown với search
         if (provinceEl.classList.contains("admin-dropdown")) {
           fillAdminDropdown(provinceEl, ADMIN_DATA);
@@ -1792,13 +1844,32 @@
           provinceEl.addEventListener("change", () => {
             const provinceValue = getAdminDropdownValue(provinceEl);
 
-            // District dùng admin dropdown
-            if (districtEl.classList.contains("admin-dropdown")) {
-              fillAdminDropdown(districtEl, districtsByProvince[provinceValue]);
-              clearAdminDropdown(wardEl);
+            // Chỉ clear district và ward nếu chọn tỉnh khác
+            if (provinceValue !== previousProvinceValue) {
+              // District dùng admin dropdown
+              if (districtEl.classList.contains("admin-dropdown")) {
+                fillAdminDropdown(
+                  districtEl,
+                  districtsByProvince[provinceValue]
+                );
+                clearAdminDropdown(wardEl);
+              } else {
+                fillDropdown(districtEl, districtsByProvince[provinceValue]);
+                clearDropdown(wardEl);
+              }
+              previousProvinceValue = provinceValue;
+              previousDistrictValue = ""; // Reset district value khi province thay đổi
             } else {
-              fillDropdown(districtEl, districtsByProvince[provinceValue]);
-              clearDropdown(wardEl);
+              // Cùng tỉnh, chỉ fill lại danh sách district để đảm bảo options được update
+              // Logic trong fillAdminDropdown/fillDropdown sẽ tự động giữ nguyên giá trị nếu còn trong danh sách
+              if (districtEl.classList.contains("admin-dropdown")) {
+                fillAdminDropdown(
+                  districtEl,
+                  districtsByProvince[provinceValue]
+                );
+              } else {
+                fillDropdown(districtEl, districtsByProvince[provinceValue]);
+              }
             }
           });
         } else {
@@ -1807,8 +1878,17 @@
 
           provinceEl.addEventListener("change", () => {
             const provinceValue = getDropdownValue(provinceEl);
-            fillDropdown(districtEl, districtsByProvince[provinceValue]);
-            clearDropdown(wardEl);
+
+            // Chỉ clear district và ward nếu chọn tỉnh khác
+            if (provinceValue !== previousProvinceValue) {
+              fillDropdown(districtEl, districtsByProvince[provinceValue]);
+              clearDropdown(wardEl);
+              previousProvinceValue = provinceValue;
+              previousDistrictValue = ""; // Reset district value khi province thay đổi
+            } else {
+              // Cùng tỉnh, chỉ fill lại danh sách district để đảm bảo options được update
+              fillDropdown(districtEl, districtsByProvince[provinceValue]);
+            }
           });
         }
 
@@ -1817,17 +1897,36 @@
           districtEl.addEventListener("change", () => {
             const districtValue = getAdminDropdownValue(districtEl);
 
-            // Ward dùng admin dropdown
-            if (wardEl.classList.contains("admin-dropdown")) {
-              fillAdminDropdown(wardEl, wardsByDistrict[districtValue]);
+            // Chỉ clear ward nếu chọn huyện khác
+            if (districtValue !== previousDistrictValue) {
+              // Ward dùng admin dropdown
+              if (wardEl.classList.contains("admin-dropdown")) {
+                fillAdminDropdown(wardEl, wardsByDistrict[districtValue]);
+              } else {
+                fillDropdown(wardEl, wardsByDistrict[districtValue]);
+              }
+              previousDistrictValue = districtValue;
             } else {
-              fillDropdown(wardEl, wardsByDistrict[districtValue]);
+              // Cùng huyện, chỉ fill lại danh sách ward để đảm bảo options được update
+              if (wardEl.classList.contains("admin-dropdown")) {
+                fillAdminDropdown(wardEl, wardsByDistrict[districtValue]);
+              } else {
+                fillDropdown(wardEl, wardsByDistrict[districtValue]);
+              }
             }
           });
         } else {
           districtEl.addEventListener("change", () => {
             const districtValue = getDropdownValue(districtEl);
-            fillDropdown(wardEl, wardsByDistrict[districtValue]);
+
+            // Chỉ clear ward nếu chọn huyện khác
+            if (districtValue !== previousDistrictValue) {
+              fillDropdown(wardEl, wardsByDistrict[districtValue]);
+              previousDistrictValue = districtValue;
+            } else {
+              // Cùng huyện, chỉ fill lại danh sách ward để đảm bảo options được update
+              fillDropdown(wardEl, wardsByDistrict[districtValue]);
+            }
           });
         }
       }
@@ -2213,9 +2312,6 @@
 
         const lines = [];
 
-        // Campaign ID
-        lines.push(["Chiến dịch", data.campaign_id]);
-
         // Mandatory fields
         Object.keys(CAMPAIGN_CONFIG.fields.mandatory).forEach((id) => {
           const field = CAMPAIGN_CONFIG.fields.mandatory[id];
@@ -2249,9 +2345,9 @@
         </ul>
       `;
 
-        // Render Zalo link section riêng nếu có và được bật
+        // Render Zalo link section riêng nếu được bật
         const zaloConfig = CAMPAIGN_CONFIG.config?.zalo || {};
-        if (zaloConfig.enabled !== false && data.zalo_link) {
+        if (zaloConfig.enabled !== false) {
           const zaloCard = $("zaloCard");
           const zaloTitle = $("zaloTitle");
           const zaloDescription = $("zaloDescription");
@@ -2267,7 +2363,11 @@
                 "Vui lòng tham gia nhóm Zalo để nhận được hỗ trợ tốt nhất.";
             }
             if (zaloLink) {
-              zaloLink.innerHTML = `<strong>Link:</strong> <a href="${data.zalo_link}" target="_blank" rel="noopener noreferrer">${data.zalo_link}</a>`;
+              if (data.zalo_link) {
+                zaloLink.innerHTML = `<strong>Link:</strong> <a href="${data.zalo_link}" target="_blank" rel="noopener noreferrer">${data.zalo_link}</a>`;
+              } else {
+                zaloLink.innerHTML = "";
+              }
             }
             zaloCard.style.display = "block";
           }
@@ -2275,6 +2375,32 @@
           const zaloCard = $("zaloCard");
           if (zaloCard) {
             zaloCard.style.display = "none";
+          }
+        }
+
+        // Render Call for Action section riêng nếu có và được bật
+        const callForActionConfig = CAMPAIGN_CONFIG.config?.callForAction || {};
+        if (callForActionConfig.enabled !== false) {
+          const callForActionCard = $("callForActionCard");
+          const callForActionTitle = $("callForActionTitle");
+          const callForActionDescription = $("callForActionDescription");
+
+          if (callForActionCard) {
+            if (callForActionTitle) {
+              callForActionTitle.textContent =
+                callForActionConfig.title || "Liên hệ tư vấn";
+            }
+            if (callForActionDescription) {
+              callForActionDescription.textContent =
+                callForActionConfig.description ||
+                "Vui lòng liên hệ để được tư vấn và hỗ trợ tốt nhất.";
+            }
+            callForActionCard.style.display = "block";
+          }
+        } else {
+          const callForActionCard = $("callForActionCard");
+          if (callForActionCard) {
+            callForActionCard.style.display = "none";
           }
         }
       }
@@ -2294,6 +2420,8 @@
         $("resultCard").style.display = "none";
         const zaloCard = $("zaloCard");
         if (zaloCard) zaloCard.style.display = "none";
+        const callForActionCard = $("callForActionCard");
+        if (callForActionCard) callForActionCard.style.display = "none";
       }
 
       function resetForm() {
