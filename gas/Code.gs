@@ -66,8 +66,9 @@ function doPost(e) {
     const now = new Date();
     const row = COLUMN_ORDER.map((col) => {
       if (col === "submitted_at") return now;
-      if (col === "ip_address") return "'" + (data[col] || "");
-      return data[col] || "";
+      if (col === "ip_address") return "'" + (data[col] ?? "");
+      // Sử dụng ?? thay vì || để giữ giá trị 0 và false
+      return data[col] ?? "";
     });
 
     sh.appendRow(row);
