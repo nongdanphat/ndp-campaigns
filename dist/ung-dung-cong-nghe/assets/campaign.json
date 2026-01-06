@@ -3,7 +3,7 @@
   "enabled": true,
   
   "config": {
-    "scriptUrl": "https://script.google.com/macros/s/AKfycbx64462atoIlB6ueKY3rDlwVhMxTmETxLqnleCck_90BbpZxAFgUvf9b1QjL0mhu4xL/exec",
+    "scriptUrl": "https://script.google.com/macros/s/AKfycbwWaNxhk8si9y1lQMcPVUc9F19_-L9lpKr1Vqm6smFloTrvemmvlZVh5lrytD-hJUe-/exec",
     "adminDataUrl": "../shared/administrative-unit-data.json",
     "zaloLinksUrl": "../shared/unit_zalo_group.csv",
     "allowMultipleSubmissions": true,

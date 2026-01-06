@@ -30,6 +30,7 @@ const COLUMN_ORDER = [
   // Thứ tự trong array = thứ tự cột trong Sheet
   // Ví dụ:
   "example_input_field",
+  "example_number_field",
   "example_checkbox",
   "example_select",
   "example_radio",
