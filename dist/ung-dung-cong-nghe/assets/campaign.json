@@ -12,12 +12,14 @@
     "zalo": {
       "enabled": true,
       "title": "Tham gia nhóm Zalo hỗ trợ nông dân",
-      "description": "Nhận thông báo mới, hướng dẫn kỹ thuật và trao đổi trực tiếp với cán bộ hỗ trợ."
+      "description": "Nhận thông báo mới, hướng dẫn kỹ thuật và trao đổi trực tiếp với cán bộ hỗ trợ.",
+      "link": "https://zalo.me/g/zox0u8849l"
     },
     "callForAction": {
       "enabled": true,
       "title": "Nhiều chương trình hỗ trợ khác đang được chuẩn bị",
-      "description": "Trong thời gian tới, Nông Dân Phát sẽ triển khai thêm nhiều chiến dịch và chương trình hỗ trợ nông dân trên nhiều lĩnh vực khác nhau như ứng dụng công nghệ, canh tác bền vững, đào tạo kỹ thuật và kết nối tiêu thụ sản phẩm."
+      "description": "Trong thời gian tới, Nông Dân Phát sẽ triển khai thêm nhiều chiến dịch và chương trình hỗ trợ nông dân trên nhiều lĩnh vực khác nhau như ứng dụng công nghệ, canh tác bền vững, đào tạo kỹ thuật và kết nối tiêu thụ sản phẩm.",
+      "link": "https://zalo.me/g/zox0u8849l"
     }
   },
   

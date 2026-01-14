@@ -810,6 +810,7 @@
             class="muted"
             style="margin-bottom: 1rem"
           ></div>
+          <div id="callForActionLink" class="muted"></div>
         </div>
 
         <!-- COPYRIGHT -->
@@ -2363,8 +2364,11 @@
                 "Vui lòng tham gia nhóm Zalo để nhận được hỗ trợ tốt nhất.";
             }
             if (zaloLink) {
-              if (data.zalo_link) {
-                zaloLink.innerHTML = `<strong>Link:</strong> <a href="${data.zalo_link}" target="_blank" rel="noopener noreferrer">${data.zalo_link}</a>`;
+              // Chỉ hiển thị link nếu có trong config
+              const linkUrl = zaloConfig.link;
+
+              if (linkUrl) {
+                zaloLink.innerHTML = `<strong>Link:</strong><br><a href="${linkUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--primary); text-decoration: underline; word-break: break-all;">${linkUrl}</a>`;
               } else {
                 zaloLink.innerHTML = "";
               }
@@ -2384,6 +2388,7 @@
           const callForActionCard = $("callForActionCard");
           const callForActionTitle = $("callForActionTitle");
           const callForActionDescription = $("callForActionDescription");
+          const callForActionLink = $("callForActionLink");
 
           if (callForActionCard) {
             if (callForActionTitle) {
@@ -2394,6 +2399,16 @@
               callForActionDescription.textContent =
                 callForActionConfig.description ||
                 "Vui lòng liên hệ để được tư vấn và hỗ trợ tốt nhất.";
+            }
+            if (callForActionLink) {
+              // Chỉ hiển thị link nếu có trong config
+              const linkUrl = callForActionConfig.link;
+
+              if (linkUrl) {
+                callForActionLink.innerHTML = `<strong>Link:</strong><br><a href="${linkUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--primary); text-decoration: underline; word-break: break-all;">${linkUrl}</a>`;
+              } else {
+                callForActionLink.innerHTML = "";
+              }
             }
             callForActionCard.style.display = "block";
           }
