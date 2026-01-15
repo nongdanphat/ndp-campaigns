@@ -27,7 +27,6 @@
     "pageTitle": "NDP-Nông Dân Phát",
     "heroTitle": "Đăng ký tham gia chiến dịch phát triển nông nghiệp bền vững",
     "description": "Chúng tôi mong muốn đồng hành cùng nông dân trong việc áp dụng các phương pháp canh tác thân thiện môi trường, nâng cao hiệu quả lâu dài và ổn định thu nhập.",
-    "image": "./assets/logo.png",
     "background": "./assets/background.png",
     "submitButtonText": "Gửi thông tin",
     "newSubmitButtonText": "Gửi thông tin khác",
@@ -43,7 +42,6 @@
     "backgroundColor": "#f3f4f6",
     "warningColor": "#ED3241",
     "cardBorderRadius": "20px",
-    "backgroundHeight": "20rem",
     "heroBorderRadius": "20px"
   },
   

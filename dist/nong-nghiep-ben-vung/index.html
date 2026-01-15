@@ -143,67 +143,32 @@
         padding: 1rem 1rem 3rem;
       }
       .hero {
-        background-size: 100% auto;
-        background-repeat: no-repeat;
-        background-position: center;
-        border-radius: 20px; /* Default, sẽ được override bởi config */
-        padding: 1rem;
         margin: 1rem 0;
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-        min-height: 120px;
-        position: relative;
+        border-radius: 20px; /* Default, sẽ được override bởi config */
         overflow: hidden;
       }
-      .hero::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 0;
-      }
-      .hero-content {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        align-items: center;
+      .hero-banner-img {
         width: 100%;
-        position: relative;
-        z-index: 1;
-      }
-      .hero img {
-        width: 3rem;
-        height: 3rem;
-        border-radius: 14px;
+        height: auto;
+        display: block;
         object-fit: cover;
-        flex-shrink: 0;
       }
-      .hero-text {
-        flex: 1;
-      }
-      .hero-text-overlay {
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(4px);
-        padding: 1.5rem 1rem;
-        border-radius: 12px;
-        display: inline-block;
-        width: 100%;
-        text-align: center;
+      .hero-info-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin: 1rem 0;
+        box-shadow: var(--shadow);
       }
       .hero-title {
         font-weight: 700;
         font-size: 1.5rem;
-        max-width: 30rem;
-        margin: 2rem auto;
-        color: white;
+        margin-bottom: 0.75rem;
+        color: #0f172a;
       }
       .hero-desc {
-        color: white;
-        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.6;
         margin: 0;
       }
       .card {
@@ -214,9 +179,9 @@
         margin-top: 1rem;
       }
       .form-title {
-        font-weight: 700;
-        margin: 1rem 0 0.5rem;
-        font-size: 1.15rem;
+        font-weight: 600;
+        margin: 1rem 0;
+        font-size: 1.3rem;
       }
       .form-title:first-child {
         margin-top: 0;
@@ -230,7 +195,7 @@
       .field label {
         display: block;
         font-weight: 500;
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.75rem;
       }
       .field-error {
         display: none;
@@ -613,21 +578,6 @@
           transform: rotate(360deg);
         }
       }
-      @media (max-width: 640px) {
-        .hero img {
-          display: block;
-          width: 5rem;
-          height: 5rem;
-          margin-bottom: 0.5rem;
-        }
-        .hero-text {
-          width: 100%;
-        }
-        .hero-text-overlay {
-          width: 100%;
-          display: block;
-        }
-      }
       .row {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -751,15 +701,18 @@
 
       <div id="campaignContent" style="display: none">
         <div class="hero" id="campaignHero">
-          <div class="hero-content">
-            <img id="campaignImage" src="" alt="Chiến dịch" />
-            <div class="hero-text">
-              <div class="hero-text-overlay">
-                <div class="hero-title" id="campaignTitle"></div>
-                <p class="hero-desc" id="campaignDesc"></p>
-              </div>
-            </div>
-          </div>
+          <img
+            class="hero-banner-img"
+            id="campaignBannerImg"
+            src=""
+            alt="Banner"
+          />
+        </div>
+
+        <!-- Hero Info Card -->
+        <div class="hero-info-card" id="heroInfoCard" style="display: none">
+          <div class="hero-title" id="campaignTitle"></div>
+          <p class="hero-desc" id="campaignDesc"></p>
         </div>
 
         <!-- FORM CARD -->
@@ -2684,37 +2637,38 @@
           // Update hero section
           if (CAMPAIGN_CONFIG.metadata) {
             const heroEl = $("campaignHero");
+            const bannerImgEl = $("campaignBannerImg");
+            const infoCardEl = $("heroInfoCard");
             const titleEl = $("campaignTitle");
             const descEl = $("campaignDesc");
-            const imgEl = $("campaignImage");
 
-            if (titleEl && CAMPAIGN_CONFIG.metadata.heroTitle) {
-              titleEl.textContent = CAMPAIGN_CONFIG.metadata.heroTitle;
-            }
-            if (descEl && CAMPAIGN_CONFIG.metadata.description) {
-              descEl.textContent = CAMPAIGN_CONFIG.metadata.description;
-            }
-            if (imgEl && CAMPAIGN_CONFIG.metadata.image) {
-              imgEl.src = CAMPAIGN_CONFIG.metadata.image;
-              imgEl.alt = CAMPAIGN_CONFIG.metadata.title || "Chiến dịch";
+            // Set banner image
+            if (bannerImgEl && CAMPAIGN_CONFIG.metadata.background) {
+              bannerImgEl.src = CAMPAIGN_CONFIG.metadata.background;
+              bannerImgEl.alt = "Banner";
             }
 
-            // Set background image and styles
-            if (heroEl && CAMPAIGN_CONFIG.metadata.background) {
-              heroEl.style.backgroundImage = `url(${CAMPAIGN_CONFIG.metadata.background})`;
-              // Set height from theme config if provided
-              if (CAMPAIGN_CONFIG.theme?.backgroundHeight) {
-                heroEl.style.height = CAMPAIGN_CONFIG.theme.backgroundHeight;
-              }
-              // Set border radius from theme config if provided
-              if (CAMPAIGN_CONFIG.theme?.heroBorderRadius) {
-                heroEl.style.borderRadius =
-                  CAMPAIGN_CONFIG.theme.heroBorderRadius;
-              }
-            } else if (heroEl && CAMPAIGN_CONFIG.theme?.heroBorderRadius) {
-              // Apply border radius even if no background image
+            // Set border radius from theme config if provided
+            if (heroEl && CAMPAIGN_CONFIG.theme?.heroBorderRadius) {
               heroEl.style.borderRadius =
                 CAMPAIGN_CONFIG.theme.heroBorderRadius;
+            }
+
+            // Populate and show info card
+            if (infoCardEl) {
+              if (titleEl && CAMPAIGN_CONFIG.metadata.heroTitle) {
+                titleEl.textContent = CAMPAIGN_CONFIG.metadata.heroTitle;
+              }
+              if (descEl && CAMPAIGN_CONFIG.metadata.description) {
+                descEl.textContent = CAMPAIGN_CONFIG.metadata.description;
+              }
+              // Show card if title or description exists
+              if (
+                CAMPAIGN_CONFIG.metadata.heroTitle ||
+                CAMPAIGN_CONFIG.metadata.description
+              ) {
+                infoCardEl.style.display = "block";
+              }
             }
           }
 
