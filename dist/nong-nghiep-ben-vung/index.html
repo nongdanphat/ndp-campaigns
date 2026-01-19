@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Nông Dân Phát – Webform Campaign</title>
+    <link rel="icon" type="image/x-icon" href="/shared/img/favicon.ico" />
 
     <!-- Inter Font -->
     <link rel="stylesheet" href="/shared/fonts/inter-fonts.css" />
@@ -46,7 +47,7 @@
       .header-nav {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: end;
         height: 4rem;
         position: relative;
       }
@@ -54,24 +55,30 @@
         position: absolute;
         left: 1rem;
         z-index: 10;
+        height: 4rem;
+        display: flex;
+        align-items: center;
       }
       .header-logo a {
-        font-size: 1.25rem;
-        font-weight: 700;
-        background: linear-gradient(to right, #ab7e31, #be8f2b);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        display: flex;
+        align-items: center;
+        height: 100%;
         text-decoration: none;
+      }
+      .header-logo img {
+        height: 4rem;
+        width: auto;
+        object-fit: contain;
       }
       .desktop-nav {
         display: none;
       }
-      @media (min-width: 1024px) {
+      @media (min-width: 1100px) {
         .desktop-nav {
           display: flex;
           align-items: center;
           gap: 2rem;
+          margin-right: 2rem;
         }
       }
       .desktop-nav a {
@@ -101,7 +108,7 @@
       .mobile-menu-button:hover {
         background-color: #fadc7c;
       }
-      @media (min-width: 1024px) {
+      @media (min-width: 1100px) {
         .mobile-menu-button {
           display: none;
         }
@@ -117,7 +124,7 @@
       .mobile-menu.show {
         display: block;
       }
-      @media (min-width: 1024px) {
+      @media (min-width: 1100px) {
         .mobile-menu {
           display: none !important;
         }
@@ -560,8 +567,14 @@
         text-align: center;
         color: #64748b;
         font-size: 0.85rem;
-        padding: 2rem 1rem 1rem;
-        margin-top: 1rem;
+        padding: 1rem 1rem;
+      }
+      .legal-notice {
+        text-align: center;
+        color: #9ca3af;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        margin-top: 2rem;
       }
       .spinner {
         width: 14px;
@@ -614,6 +627,68 @@
         border-radius: 12px;
         margin: 1rem 0;
       }
+      .consent-checkbox-container {
+        margin-bottom: 1.5rem;
+      }
+      .consent-checkbox-label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        cursor: pointer;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: #374151;
+      }
+      .consent-checkbox-input {
+        width: 18px;
+        height: 18px;
+        margin-top: 0.2rem;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        border: 2px solid #cbd5e1;
+        border-radius: 4px;
+        position: relative;
+        transition: all 0.2s;
+        flex-shrink: 0;
+        box-sizing: border-box;
+      }
+      .consent-checkbox-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+      }
+      .consent-checkbox-input:checked::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+        width: 5px;
+        height: 10px;
+        border: solid #fff;
+        border-width: 0 2.5px 2.5px 0;
+        box-sizing: border-box;
+      }
+      .consent-checkbox-input:focus {
+        box-shadow: 0 0 0 3px rgba(171, 126, 49, 0.12);
+        outline: none;
+      }
+      .consent-checkbox-text {
+        flex: 1;
+      }
+      .brand-name {
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .privacy-link {
+        color: var(--primary);
+        text-decoration: underline;
+        transition: opacity 0.2s;
+      }
+      .privacy-link:hover {
+        opacity: 0.8;
+      }
     </style>
   </head>
   <body>
@@ -623,9 +698,9 @@
         <div class="header-nav">
           <!-- Logo -->
           <div class="header-logo">
-            <a href="https://ndphat.vn/"
-              >NDP</a
-            >
+            <a href="https://ndphat.vn/">
+              <img src="/shared/img/logo.png" alt="Nông Dân Phát" />
+            </a>
           </div>
 
           <!-- Desktop Navigation -->
@@ -726,13 +801,24 @@
 
         <!-- SUBMIT SECTION (luôn ở cuối) -->
         <div class="card" id="submitCard">
-          <div class="muted" style="margin-bottom: 1rem">
-            Các ô có dấu <span style="color: var(--danger)">*</span> không được
-            bỏ trống.
+          <!-- Consent Checkbox -->
+          <div class="consent-checkbox-container">
+            <label class="consent-checkbox-label">
+              <input type="checkbox" id="consentCheckbox" class="consent-checkbox-input" />
+              <span class="consent-checkbox-text">
+                Tôi đồng ý cho <span class="brand-name">Nông Dân Phát</span> thu thập và sử dụng thông tin tôi cung cấp để liên hệ tư vấn và cung cấp thông tin liên quan, theo <a href="https://ndphat.vn/chinh-sach-bao-mat" target="_blank" rel="noopener noreferrer" class="privacy-link">Chính sách bảo mật</a>.
+                <br />
+                Thông tin bạn cung cấp giúp <span class="brand-name">Nông Dân Phát</span> hiểu nhu cầu và liên hệ lại khi cần thiết.
+                <br />
+                Việc gửi thông tin không làm phát sinh bất kỳ nghĩa vụ hay giao dịch nào.
+              </span>
+            </label>
           </div>
-          <button id="submitBtn">
+          
+          <button id="submitBtn" disabled>
             <span id="submitText">Gửi thông tin</span>
           </button>
+          
           <div id="status" class="status"></div>
         </div>
 
@@ -766,6 +852,11 @@
           ></div>
           <div id="callForActionLink" class="muted"></div>
         </div>
+
+        <!-- LEGAL NOTICE -->
+        <p class="legal-notice">
+          Website hoạt động theo quy định pháp luật Việt Nam.
+        </p>
 
         <!-- COPYRIGHT -->
         <div id="copyright" class="copyright"></div>
@@ -2593,6 +2684,12 @@
           });
         });
 
+        // Reset consent checkbox
+        const consentCheckbox = $("consentCheckbox");
+        if (consentCheckbox) {
+          consentCheckbox.checked = false;
+        }
+
         setStatus("");
         const submitText = $("submitText");
         if (submitText) {
@@ -2601,7 +2698,14 @@
           submitText.textContent = defaultText;
         }
         const submitBtn = $("submitBtn");
-        if (submitBtn) submitBtn.disabled = false;
+        if (submitBtn) {
+          // Disable button if checkbox exists
+          if (consentCheckbox) {
+            submitBtn.disabled = true;
+          } else {
+            submitBtn.disabled = false;
+          }
+        }
         isSubmitting = false;
       }
 
@@ -2716,6 +2820,18 @@
             submitBtn.addEventListener("click", handleSubmit);
           }
 
+          // Setup consent checkbox handler
+          const consentCheckbox = $("consentCheckbox");
+          if (consentCheckbox && submitBtn) {
+            // Initially disable button
+            submitBtn.disabled = true;
+            
+            // Enable/disable button based on checkbox
+            consentCheckbox.addEventListener("change", function() {
+              submitBtn.disabled = !this.checked;
+            });
+          }
+
           // Setup new submit handler
           const newSubmitBtn = $("newSubmitBtn");
           if (newSubmitBtn) {
@@ -2764,8 +2880,14 @@
       async function handleSubmit() {
         if (isSubmitting) return;
 
+        // Check consent checkbox
+        const consentCheckbox = $("consentCheckbox");
+        if (!consentCheckbox || !consentCheckbox.checked) {
+          setStatus("Vui lòng đồng ý với chính sách bảo mật để tiếp tục.", "var(--danger)");
+          return;
+        }
+
         if (!validateForm()) {
-          setStatus("Vui lòng điền đầy đủ các ô đánh dấu đỏ.", "var(--danger)");
           return;
         }
 
