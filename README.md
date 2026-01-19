@@ -3,6 +3,45 @@
 Trang web tĩnh thu thập thông tin chiến dịch.  
 Triển khai: **Cloudflare Pages** + **Google Apps Script**.
 
+## 🏃 Chạy local để test
+
+**Quan trọng:** Tất cả các đường dẫn trong project đã được cấu hình là **absolute paths** (bắt đầu bằng `/`) để phù hợp với Cloudflare Pages.
+
+Khi chạy local, bạn **phải** chạy server từ thư mục `dist/`:
+
+### Cách 1: Sử dụng Live Server (VS Code)
+
+1. Click chuột phải vào file `dist/nong-nghiep-ben-vung/index.html` hoặc `dist/ung-dung-cong-nghe/index.html`
+2. Chọn **"Open with Live Server"**
+
+### Cách 2: Sử dụng Python HTTP Server (Khuyến nghị)
+
+**Windows (PowerShell):**
+```powershell
+cd dist
+python -m http.server 8000
+```
+
+**Windows (CMD):**
+```cmd
+cd dist
+python -m http.server 8000
+```
+
+Sau đó truy cập: 
+- `http://localhost:8000/nong-nghiep-ben-vung/`
+- `http://localhost:8000/ung-dung-cong-nghe/`
+
+### Cách 3: Sử dụng Node.js http-server
+
+```bash
+npx http-server dist -p 8000 -o
+```
+
+Sau đó truy cập: 
+- `http://localhost:8000/nong-nghiep-ben-vung/`
+- `http://localhost:8000/ung-dung-cong-nghe/`
+
 ## 📁 Cấu trúc dự án
 
 ```

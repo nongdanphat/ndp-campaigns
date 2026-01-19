@@ -1,0 +1,10 @@
+{
+  "name": "ndp-campaigns",
+  "version": "1.0.0",
+  "description": "NDP Campaigns Webform",
+  "scripts": {
+    "serve": "cd dist && python -m http.server 8000",
+    "serve:node": "npx http-server dist -p 8000 -o"
+  },
+  "devDependencies": {}
+}

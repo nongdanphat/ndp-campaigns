@@ -6,7 +6,7 @@
     <title>Nông Dân Phát – Webform Campaign</title>
 
     <!-- Inter Font -->
-    <link rel="stylesheet" href="../shared/fonts/inter-fonts.css" />
+    <link rel="stylesheet" href="/shared/fonts/inter-fonts.css" />
 
     <style>
       :root {
@@ -623,30 +623,30 @@
         <div class="header-nav">
           <!-- Logo -->
           <div class="header-logo">
-            <a href="https://nongdanphat.github.io/ndp-website/index.html"
+            <a href="https://ndphat.vn/"
               >NDP</a
             >
           </div>
 
           <!-- Desktop Navigation -->
           <div class="desktop-nav">
-            <a href="https://nongdanphat.github.io/ndp-website/index.html"
+            <a href="https://ndphat.vn/"
               >Trang chủ</a
             >
             <a
-              href="https://nongdanphat.github.io/ndp-website/insights/index.html"
+              href="https://ndphat.vn/insights/"
               >Chia sẻ & Xin ý kiến</a
             >
             <a
-              href="https://nongdanphat.github.io/ndp-website/campaigns/index.html"
+              href="https://ndphat.vn/campaigns/"
               >Chiến dịch & Chương trình</a
             >
             <a
-              href="https://nongdanphat.github.io/ndp-website/join-us/index.html"
+              href="https://ndphat.vn/join-us/"
               >Tuyển dụng & Đồng hành</a
             >
             <a
-              href="https://nongdanphat.github.io/ndp-website/contact/index.html"
+              href="https://ndphat.vn/contact/"
               >Liên hệ</a
             >
           </div>
@@ -671,23 +671,23 @@
         <!-- Mobile Navigation -->
         <div class="mobile-menu" id="mobile-menu">
           <div class="menu-items">
-            <a href="https://nongdanphat.github.io/ndp-website/index.html"
+            <a href="https://ndphat.vn/"
               >Trang chủ</a
             >
             <a
-              href="https://nongdanphat.github.io/ndp-website/insights/index.html"
+              href="https://ndphat.vn/insights/"
               >Chia sẻ & Xin ý kiến</a
             >
             <a
-              href="https://nongdanphat.github.io/ndp-website/campaigns/index.html"
+              href="https://ndphat.vn/campaigns/"
               >Chiến dịch & Chương trình</a
             >
             <a
-              href="https://nongdanphat.github.io/ndp-website/join-us/index.html"
+              href="https://ndphat.vn/join-us/"
               >Tuyển dụng & Đồng hành</a
             >
             <a
-              href="https://nongdanphat.github.io/ndp-website/contact/index.html"
+              href="https://ndphat.vn/contact/"
               >Liên hệ</a
             >
           </div>
@@ -786,7 +786,7 @@
 
       function getCampaignJsonUrl() {
         // Luôn load từ ./assets/campaign.json (mỗi chiến dịch có thư mục riêng)
-        return "./assets/campaign.json";
+        return "/ung-dung-cong-nghe/assets/campaign.json";
       }
 
       function applyTheme(theme) {
@@ -2676,7 +2676,7 @@
           // Load administrative data
           const adminUrl =
             CAMPAIGN_CONFIG.config?.adminDataUrl ||
-            "../shared/administrative-unit-data.json";
+            "/shared/administrative-unit-data.json";
           const adminRes = await fetch(adminUrl, { cache: "force-cache" });
           if (!adminRes.ok) {
             throw new Error(
@@ -2689,7 +2689,7 @@
           // Load Zalo links CSV
           const zaloUrl =
             CAMPAIGN_CONFIG.config?.zaloLinksUrl ||
-            "../shared/unit_zalo_group.csv";
+            "/shared/unit_zalo_group.csv";
           const zaloRes = await fetch(zaloUrl, { cache: "force-cache" });
           if (zaloRes.ok) {
             const csvText = await zaloRes.text();
