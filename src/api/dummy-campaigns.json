@@ -17,21 +17,21 @@
     }
   },
   "metadata": {
-    "heroTitle": "Đăng ký tham gia chiến dịch phát triển nông nghiệp bền vững",
-    "description": "Chúng tôi mong muốn đồng hành cùng nông dân trong việc áp dụng các phương pháp canh tác thân thiện môi trường, nâng cao hiệu quả lâu dài và ổn định thu nhập.",
     "submitButtonText": "Gửi thông tin",
     "newSubmitButtonText": "Gửi thông tin khác",
     "disabledMessage": "Chiến dịch này hiện đang tắt.",
-    "startDate": "1/1/2026",
+    "startDate": "01/11/2026",
     "endDate": "31/12/2026",
-    "resultTitle": "Đã gửi thông tin thành công"
+    "resultTitle": "Đã gửi thông tin thành công",
+    "heroTitle": "Thanh long 1",
+    "description": "Mô tả thanh long 1"
   },
   "theme": {
-    "primaryColor": "#AB7E31",
+    "primaryColor": "#26690F",
     "backgroundColor": "#f3f4f6",
     "warningColor": "#ED3241",
-    "cardBorderRadius": "20px",
-    "heroBorderRadius": "20px"
+    "cardBorderRadius": "0px",
+    "heroBorderRadius": "10px"
   },
   "fields": {
     "mandatory": {
@@ -68,89 +68,69 @@
         "type": "select",
         "source": "administrative",
         "required": true,
-        "visible": true
+        "visible": false
       },
       "hamlet": {
         "label": "Thôn / Ấp / Tổ dân phố",
         "type": "text",
         "placeholder": "VD: Thôn A / Ấp B / Tổ 5 KP 3",
         "required": true,
-        "visible": true
+        "visible": false
       },
       "street": {
         "label": "Đường",
         "type": "text",
         "placeholder": "Tên đường (Nếu có)",
         "required": false,
-        "visible": true
+        "visible": false
       },
       "house_number": {
         "label": "Số nhà",
         "type": "text",
         "placeholder": "Số nhà (Nếu có)",
         "required": false,
-        "visible": true
+        "visible": false
       }
     },
     "custom": [
       {
-        "title": "Thông tin canh tác & định hướng phát triển",
+        "title": "Câu hỏi thêm",
         "fields": [
           {
-            "id": "example_input_field",
-            "label": "Loại cây trồng / vật nuôi chính",
+            "id": "field_4b6bc3b8",
+            "label": "Bạn viết gì đi",
             "type": "text",
-            "placeholder": "VD: Lúa, rau màu, cà phê, chăn nuôi heo…",
-            "required": false
+            "placeholder": "Viết đi",
+            "required": true
           },
           {
-            "id": "example_number_field",
-            "label": "Số năm kinh nghiệm canh tác (năm)",
-            "type": "number",
-            "placeholder": "VD: 5",
-            "required": false
-          },
-          {
-            "id": "example_checkbox",
-            "label": "Phương pháp quan tâm",
-            "type": "checkbox",
-            "required": true,
-            "options": [
-              "Canh tác hữu cơ",
-              "Giảm phân thuốc hóa học",
-              "Tái sử dụng phụ phẩm nông nghiệp",
-              "Bảo vệ đất & nguồn nước"
-            ]
-          },
-          {
-            "id": "example_select",
-            "label": "Mục tiêu tham gia chiến dịch",
-            "type": "select",
-            "required": true,
-            "options": [
-              "Nâng cao năng suất",
-              "Bảo vệ môi trường",
-              "Ổn định đầu ra"
-            ]
-          },
-          {
-            "id": "example_radio",
-            "label": "Giới tính",
+            "id": "field_29b18504",
+            "label": "Chọn 1",
             "type": "radio",
-            "required": true,
-            "options": [
-              "Nam",
-              "Nữ",
-              "Khác"
-            ]
+            "required": false,
+            "options": ["Một", "Hai"]
           },
           {
-            "id": "example_textarea",
-            "label": "Mong muốn hỗ trợ từ chương trình",
+            "id": "field_0edb8ec8",
+            "label": "Chọn nhiều",
+            "type": "checkbox",
+            "required": false,
+            "options": ["Chọn a", "Chọn b"]
+          },
+          {
+            "id": "field_a850d8bb",
+            "label": "Số nào",
+            "type": "number",
+            "required": false,
+            "placeholder": "1 số"
+          },
+          {
+            "id": "field_d2e43fc4",
+            "label": "Nhập text nhiều",
             "type": "textarea",
-            "placeholder": "VD: Đào tạo kỹ thuật, kết nối chuyên gia, hỗ trợ mô hình mẫu…",
-            "rows": 4,
-            "required": false
+            "required": false,
+            "placeholder": "nhiều ...",
+            "rows": 4
           }
         ]
       }

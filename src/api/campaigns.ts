@@ -10,6 +10,10 @@ type CampaignBody = {
   data?: Campaign;
 };
 
+function isPreview(): boolean {
+  return new URLSearchParams(window.location.search).get("preview") === "true";
+}
+
 function fallbackCampaign(campaignId: string): Campaign {
   return {
     id: campaignId,
@@ -21,6 +25,13 @@ function fallbackCampaign(campaignId: string): Campaign {
   };
 }
 
+function allowPreview(campaign: Campaign): Campaign {
+  if (isPreview() && campaign.enabled === false) {
+    return { ...campaign, enabled: true };
+  }
+  return campaign;
+}
+
 export async function getCampaignConfig(campaignId: string): Promise<Campaign> {
   try {
     const response = await apiFetch<{ data: CampaignBody }>(
@@ -30,8 +41,8 @@ export async function getCampaignConfig(campaignId: string): Promise<Campaign> {
     if (!body?.success || !body.data) {
       throw new Error(body?.message || "Không tải được chiến dịch");
     }
-    return body.data;
+    return allowPreview(body.data);
   } catch {
-    return fallbackCampaign(campaignId);
+    return allowPreview(fallbackCampaign(campaignId));
   }
 }

@@ -1551,7 +1551,10 @@
         $("customFieldsCards").style.display = "none";
         $("submitCard").style.display = "none";
         $("resultCard").style.display = "block";
-        // Zalo card sẽ được hiển thị trong renderReceipt nếu có
+        const heroEl = $("campaignHero");
+        if (heroEl) heroEl.style.display = "none";
+        const infoCardEl = $("heroInfoCard");
+        if (infoCardEl) infoCardEl.style.display = "none";
       }
 
       function showFormCard() {
@@ -1559,6 +1562,16 @@
         $("customFieldsCards").style.display = "block";
         $("submitCard").style.display = "block";
         $("resultCard").style.display = "none";
+        const heroEl = $("campaignHero");
+        if (heroEl) heroEl.style.display = "";
+        const infoCardEl = $("heroInfoCard");
+        if (
+          infoCardEl &&
+          (CAMPAIGN_CONFIG?.metadata?.heroTitle ||
+            CAMPAIGN_CONFIG?.metadata?.description)
+        ) {
+          infoCardEl.style.display = "block";
+        }
         const zaloCard = $("zaloCard");
         if (zaloCard) zaloCard.style.display = "none";
         const callForActionCard = $("callForActionCard");
@@ -1962,6 +1975,7 @@
           }
           setStatus("");
           if (submitText) submitText.textContent = "Đã gửi ✔";
+          renderReceipt(payload, new Date().toISOString());
           showResultCard();
         } catch (err) {
           console.error(err);
