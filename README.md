@@ -1,7 +1,7 @@
 # 🌾 NDP Campaigns – Webform Lite
 
 Trang web tĩnh thu thập thông tin chiến dịch.  
-Một lần deploy, mọi chiến dịch đi qua `/{campaign-id}`. Config tạm nằm ở `src/api/dummy-config.ts`. Địa giới và (sau này) đáp án đi qua API backend.
+Một lần deploy, mọi chiến dịch đi qua `/{campaign-id}`. Config tạm nằm ở `src/api/dummy-campaigns.json`. Địa giới và (sau này) đáp án đi qua API backend.
 
 ## 🏃 Chạy local cho giống production
 
@@ -19,11 +19,10 @@ pnpm serve          # http://localhost:8000
 Mở đúng dạng URL production:
 
 - `http://localhost:8000/nong-nghiep-ben-vung`
-- `http://localhost:8000/ung-dung-cong-nghe`
 
 Trên domain thật là `https://campaign.ndphat.vn/nong-nghiep-ben-vung`. Không có `/index.html` và không có `?campaign=`.
 
-Sửa code trong `src/` hoặc config trong `src/api/dummy-config.ts` thì chạy lại `pnpm build`, rồi tải lại trang. `pnpm serve` đang chạy thì không cần tắt.
+Sửa code trong `src/` hoặc config trong `src/api/dummy-campaigns.json` thì chạy lại `pnpm build`, rồi tải lại trang. `pnpm serve` đang chạy thì không cần tắt.
 
 Trình duyệt chỉ gọi `/v1` trên cùng origin. `pnpm serve` và Cloudflare chuyển tiếp sang `API_REWRITE_TARGET` trong `.env` (`https://dev-api.ndphat.com`), giống rewrite của các app khác, nên không bị CORS. Copy `.env.example` thành `.env` nếu chưa có. Đổi URL thì chạy lại `pnpm build` và khởi động lại `pnpm serve`. Dropdown tỉnh / huyện / xã gọi `GET /v1/metadata/old-provinces`, `old-districts` và `old-wards`. Huyện chỉ mở sau khi chọn tỉnh, xã chỉ mở sau khi chọn huyện.
 
@@ -37,9 +36,12 @@ ndp-campaigns/
 │   ├── index.html          # shell
 │   ├── main.ts
 │   ├── form-engine.js
+│   ├── types/
+│   │   └── campaign.ts     # type chiến dịch
 │   └── api/
 │       ├── mutator.ts      # API_BASE_URL
-│       ├── dummy-config.ts # config chiến dịch tạm
+│       ├── dummy-campaigns.json # config chiến dịch tạm, chỉ JSON
+│       ├── campaigns.ts    # đọc dummy JSON
 │       ├── admin-units.ts
 │       ├── submit-answers.ts
 │       └── generated/      # pnpm generate:api, không commit
@@ -51,7 +53,7 @@ ndp-campaigns/
 
 ## 🚀 Tạo chiến dịch mới
 
-Thêm một key trong `src/api/dummy-config.ts` → `dummyCampaigns`. Key trùng với đoạn path trên URL. Ví dụ key `nong-nghiep-ben-vung` mở bằng `/nong-nghiep-ben-vung`.
+`src/api/dummy-campaigns.json` chỉ là phần `data` mà app admin gửi BE: `config`, `metadata`, `theme`, `fields`. App form gọi `GET /v1/campaigns/{id}`. API lỗi thì dùng file này cho mọi id trên URL. `id`, `createdAt`, `updatedAt`, `enabled`, `answerQuantity` do BE trả, không ghi trong file. Type nằm ở `src/types/campaign.ts`.
 
 Sửa `metadata`, `theme`, `fields.custom`, card Zalo và call for action trong object đó, rồi chạy `pnpm build`. Mọi form dùng chung ảnh `dist/shared/img/background.png`.
 
@@ -61,7 +63,7 @@ Sửa `metadata`, `theme`, `fields.custom`, card Zalo và call for action trong 
 
 ### Không được sửa đổi fields hệ thống
 
-**Trong `dummy-config.ts` → `fields.mandatory`:**
+**Trong `dummy-campaigns.json` → `fields.mandatory`:**
 - ❌ **KHÔNG được**: Xóa, thêm, hoặc thay đổi `id` của các trường hệ thống (bắt buộc và không bắt buộc)
 - ❌ **KHÔNG được**: Đổi `type`, `required`, `source` của các trường hệ thống
 - ✅ **Được phép**: Thay đổi `label`, `placeholder`, và `visible`
@@ -161,13 +163,13 @@ Cấu trúc: `fields.custom` là **array** các section, mỗi section có `titl
 - Radio: Chỉ cho phép chọn một option
 
 **⚠️ QUAN TRỌNG:**
-- Field id trong `dummy-config.ts` là key trong object đáp án gửi lên backend
+- Field id trong `dummy-campaigns.json` là key trong object đáp án gửi lên backend
 
 ## 🔧 Cấu hình Zalo và Call for Action
 
 ### Bật/tắt Zalo Card
 
-Card Zalo sẽ hiển thị sau khi người dùng submit form thành công. Cấu hình trong `dummy-config.ts`:
+Card Zalo sẽ hiển thị sau khi người dùng submit form thành công. Cấu hình trong `dummy-campaigns.json`:
 
 ```json
 "config": {
@@ -187,7 +189,7 @@ Card Zalo sẽ hiển thị sau khi người dùng submit form thành công. C�
 
 ### Bật/tắt Call for Action Card (Kêu gọi hành động)
 
-Card Call for Action hiển thị thông điệp kêu gọi người dùng liên hệ hoặc thực hiện hành động. Cấu hình trong `dummy-config.ts`:
+Card Call for Action hiển thị thông điệp kêu gọi người dùng liên hệ hoặc thực hiện hành động. Cấu hình trong `dummy-campaigns.json`:
 
 ```json
 "config": {

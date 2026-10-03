@@ -1,8 +1,5 @@
 import { loadDistricts, loadProvinces, loadWards } from "./api/admin-units";
-import {
-  getDummyCampaignConfig,
-  listDummyCampaigns,
-} from "./api/dummy-config";
+import { getCampaignConfig } from "./api/campaigns";
 import { submitCampaignAnswers } from "./api/submit-answers";
 import { startCampaign } from "./form-engine.js";
 
@@ -22,14 +19,6 @@ function campaignIdFromUrl(): string {
   return last;
 }
 
-function campaignHref(campaignId: string): string {
-  const openedAsFile = /index\.html$/i.test(window.location.pathname);
-  if (openedAsFile) {
-    return `index.html?campaign=${encodeURIComponent(campaignId)}`;
-  }
-  return `/${encodeURIComponent(campaignId)}`;
-}
-
 function showCampaignList() {
   const loading = document.getElementById("loadingMessage");
   if (loading) loading.style.display = "none";
@@ -45,15 +34,10 @@ function showCampaignList() {
   title.textContent = "Chọn chiến dịch";
   box.appendChild(title);
 
-  listDummyCampaigns().forEach((campaign) => {
-    const link = document.createElement("a");
-    link.href = campaignHref(campaign.id);
-    link.textContent = campaign.title;
-    link.style.display = "block";
-    link.style.margin = "0.75rem 0";
-    link.style.color = "var(--primary)";
-    box.appendChild(link);
-  });
+  const hint = document.createElement("p");
+  hint.textContent =
+    "Mở đường dẫn /{id}. Mọi mã hiện dùng config mẫu cho đến khi API chiến dịch trả về.";
+  box.appendChild(hint);
 
   page.appendChild(box);
 }
@@ -68,21 +52,23 @@ function showBootError(message: string) {
   }
 }
 
-const campaignId = campaignIdFromUrl();
-const config = campaignId ? getDummyCampaignConfig(campaignId) : null;
+async function boot() {
+  const campaignId = campaignIdFromUrl();
+  if (!campaignId) {
+    showCampaignList();
+    return;
+  }
 
-if (!campaignId) {
-  showCampaignList();
-} else if (!config) {
-  showBootError(
-    `Không tìm thấy chiến dịch "${campaignId}". Thêm config trong src/api/dummy-config.ts.`
-  );
-} else {
+  const config = await getCampaignConfig(campaignId);
   startCampaign(config, {
     loadProvinces,
     loadDistricts,
     loadWards,
     submitAnswers: (payload: Record<string, unknown>) =>
-      submitCampaignAnswers(config.campaign_id, payload),
+      submitCampaignAnswers(config.id, payload),
   });
 }
+
+boot().catch((err) => {
+  showBootError(err instanceof Error ? err.message : "Không tải được chiến dịch.");
+});

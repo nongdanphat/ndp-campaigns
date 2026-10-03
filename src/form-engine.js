@@ -1,5 +1,6 @@
 
       // ======= GLOBAL STATE =======
+      let CAMPAIGN = null;
       let CAMPAIGN_CONFIG = null;
       let isSubmitting = false;
       let loadProvinces = async () => [];
@@ -10,8 +11,9 @@
       // ======= UTILITIES =======
       const $ = (id) => document.getElementById(id);
 
-      export async function startCampaign(config, services = {}) {
-        CAMPAIGN_CONFIG = config;
+      export async function startCampaign(campaign, services = {}) {
+        CAMPAIGN = campaign;
+        CAMPAIGN_CONFIG = campaign.data;
         if (services.loadProvinces) loadProvinces = services.loadProvinces;
         if (services.loadDistricts) loadDistricts = services.loadDistricts;
         if (services.loadWards) loadWards = services.loadWards;
@@ -1334,7 +1336,7 @@
       // ======= SUBMISSION =======
       function collectFormData() {
         const data = {
-          campaign_id: CAMPAIGN_CONFIG.campaign_id || "default",
+          campaign_id: CAMPAIGN.id || "default",
         };
 
         // Collect mandatory fields
@@ -1801,7 +1803,7 @@
           }
 
           // Check if campaign is enabled
-          if (CAMPAIGN_CONFIG.enabled === false) {
+          if (CAMPAIGN.enabled === false) {
             const disabledMsg =
               CAMPAIGN_CONFIG.metadata?.disabledMessage ||
               "Chiến dịch này hiện đang tắt.";
@@ -1812,11 +1814,6 @@
           // Apply theme
           if (CAMPAIGN_CONFIG.theme) {
             applyTheme(CAMPAIGN_CONFIG.theme);
-          }
-
-          // Update page title (hiển thị trên tab trình duyệt)
-          if (CAMPAIGN_CONFIG.metadata && CAMPAIGN_CONFIG.metadata.pageTitle) {
-            document.title = CAMPAIGN_CONFIG.metadata.pageTitle;
           }
 
           // Update hero section
@@ -1904,12 +1901,6 @@
           if (submitTextEl && CAMPAIGN_CONFIG.metadata?.submitButtonText) {
             submitTextEl.textContent =
               CAMPAIGN_CONFIG.metadata.submitButtonText;
-          }
-
-          // Set copyright text from config
-          const copyrightEl = $("copyright");
-          if (copyrightEl && CAMPAIGN_CONFIG.metadata?.copyright) {
-            copyrightEl.textContent = CAMPAIGN_CONFIG.metadata.copyright;
           }
 
           // Set result title from config
