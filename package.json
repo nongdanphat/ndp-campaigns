@@ -3,8 +3,16 @@
   "version": "1.0.0",
   "description": "NDP Campaigns Webform",
   "scripts": {
-    "serve": "cd dist && python -m http.server 8000",
-    "serve:node": "npx http-server dist -p 8000 -o"
+    "generate:api": "orval --config orval.config.mjs",
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs"
   },
-  "devDependencies": {}
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "orval": "^8.39.0"
+  },
+  "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8"
 }

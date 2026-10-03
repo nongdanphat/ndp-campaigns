@@ -1,9 +1,11 @@
 # Dependencies
 node_modules/
 
-# Keep structure but ignore actual campaign assets
-!dist/*/assets/campaign.json
-!dist/*/assets/administrative-unit-data.json
+# Local API target. Mẫu nằm ở .env.example
+.env
+
+# Orval output. Tạo lại bằng pnpm generate:api
+src/api/generated/
 
 # IDE
 .vscode/

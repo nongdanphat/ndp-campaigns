@@ -1,121 +1,72 @@
 # 🌾 NDP Campaigns – Webform Lite
 
 Trang web tĩnh thu thập thông tin chiến dịch.  
-Triển khai: **Cloudflare Pages** + **Google Apps Script**.
+Một lần deploy, mọi chiến dịch đi qua `/{campaign-id}`. Config tạm nằm ở `src/api/dummy-config.ts`. Địa giới và (sau này) đáp án đi qua API backend.
 
-## 🏃 Chạy local để test
+## 🏃 Chạy local cho giống production
 
-**Quan trọng:** Tất cả các đường dẫn trong project đã được cấu hình là **absolute paths** (bắt đầu bằng `/`) để phù hợp với Cloudflare Pages.
+Không dùng Live Server. Live Server mở file thành `/index.html`, không rewrite path như host thật, nên URL local sẽ khác production.
 
-Khi chạy local, bạn **phải** chạy server từ thư mục `dist/`:
-
-### Cách 1: Sử dụng Live Server (VS Code)
-
-1. Click chuột phải vào file `dist/nong-nghiep-ben-vung/index.html` hoặc `dist/ung-dung-cong-nghe/index.html`
-2. Chọn **"Open with Live Server"**
-
-### Cách 2: Sử dụng Python HTTP Server (Khuyến nghị)
-
-**Windows (PowerShell):**
-```powershell
-cd dist
-python -m http.server 8000
-```
-
-**Windows (CMD):**
-```cmd
-cd dist
-python -m http.server 8000
-```
-
-Sau đó truy cập: 
-- `http://localhost:8000/nong-nghiep-ben-vung/`
-- `http://localhost:8000/ung-dung-cong-nghe/`
-
-### Cách 3: Sử dụng Node.js http-server
+Dùng `pnpm serve`. Server này phát thư mục `dist/` và làm cùng việc với `dist/_redirects` trên Cloudflare: path không có file tĩnh thì trả về shell, thanh địa chỉ vẫn giữ mã chiến dịch.
 
 ```bash
-npx http-server dist -p 8000 -o
+pnpm install
+pnpm generate:api   # đọc swagger-spec.json, ghi src/api/generated (chạy lại khi spec đổi)
+pnpm build          # ra dist/index.html và dist/app.js
+pnpm serve          # http://localhost:8000
 ```
 
-Sau đó truy cập: 
-- `http://localhost:8000/nong-nghiep-ben-vung/`
-- `http://localhost:8000/ung-dung-cong-nghe/`
+Mở đúng dạng URL production:
+
+- `http://localhost:8000/nong-nghiep-ben-vung`
+- `http://localhost:8000/ung-dung-cong-nghe`
+
+Trên domain thật là `https://campaign.ndphat.vn/nong-nghiep-ben-vung`. Không có `/index.html` và không có `?campaign=`.
+
+Sửa code trong `src/` hoặc config trong `src/api/dummy-config.ts` thì chạy lại `pnpm build`, rồi tải lại trang. `pnpm serve` đang chạy thì không cần tắt.
+
+Trình duyệt chỉ gọi `/v1` trên cùng origin. `pnpm serve` và Cloudflare chuyển tiếp sang `API_REWRITE_TARGET` trong `.env` (`https://dev-api.ndphat.com`), giống rewrite của các app khác, nên không bị CORS. Copy `.env.example` thành `.env` nếu chưa có. Đổi URL thì chạy lại `pnpm build` và khởi động lại `pnpm serve`. Dropdown tỉnh / huyện / xã gọi `GET /v1/metadata/old-provinces`, `old-districts` và `old-wards`. Huyện chỉ mở sau khi chọn tỉnh, xã chỉ mở sau khi chọn huyện.
 
 ## 📁 Cấu trúc dự án
 
 ```
 ndp-campaigns/
-├── gas/                    # Google Apps Script template
-│   └── Code.gs
-│
-├── shared/                 # Dữ liệu dùng chung
-│   ├── administrative-unit-data.json
-│   └── unit_zalo_group.csv
-│
-└── dist/                   # Chiến dịch đã build (deploy folder này)
-    ├── _redirects
-    ├── thudong2025/
-    │   ├── index.html
-    │   ├── assets/
-    │   │   ├── campaign.json
-    │   │   ├── background.png
-    │   │   └── logo.png
-    │   └── _headers
-    └── ...
+├── swagger-spec.json       # contract backend, Orval đọc file này
+├── orval.config.mjs
+├── src/
+│   ├── index.html          # shell
+│   ├── main.ts
+│   ├── form-engine.js
+│   └── api/
+│       ├── mutator.ts      # API_BASE_URL
+│       ├── dummy-config.ts # config chiến dịch tạm
+│       ├── admin-units.ts
+│       ├── submit-answers.ts
+│       └── generated/      # pnpm generate:api, không commit
+└── dist/                   # output deploy
+    ├── index.html
+    ├── app.js
+    └── _redirects
 ```
 
 ## 🚀 Tạo chiến dịch mới
 
-### 1. Tạo thư mục chiến dịch
+Thêm một key trong `src/api/dummy-config.ts` → `dummyCampaigns`. Key trùng với đoạn path trên URL. Ví dụ key `nong-nghiep-ben-vung` mở bằng `/nong-nghiep-ben-vung`.
 
-```bash
-# Tạo thư mục
-mkdir dist/ten-chien-dich
-mkdir dist/ten-chien-dich/assets
-```
+Sửa `metadata`, `theme`, `fields.custom`, card Zalo và call for action trong object đó, rồi chạy `pnpm build`. Mọi form dùng chung ảnh `dist/shared/img/background.png`.
 
-Sau đó tạo các file cần thiết (index.html, campaign.json, _headers, assets/background.png, assets/logo.png) hoặc copy từ một chiến dịch có sẵn.
-
-### 2. Cấu hình campaign.json
-
-Mở `dist/ten-chien-dich/assets/campaign.json` và sửa:
-- `campaign_id` → Tên chiến dịch
-- `config.scriptUrl` → URL Google Apps Script (bắt buộc)
-- `metadata.*` → Thông tin chiến dịch
-- `fields.custom` → Thêm custom fields nếu cần
-- `config.zalo.enabled` → Bật/tắt hiển thị card Zalo (mặc định: `true`)
-- `config.zalo.title` → Tiêu đề card Zalo
-- `config.zalo.description` → Mô tả card Zalo
-- `config.callForAction.enabled` → Bật/tắt hiển thị card Kêu gọi hành động (mặc định: `true`)
-- `config.callForAction.title` → Tiêu đề card Kêu gọi
-- `config.callForAction.description` → Mô tả card Kêu gọi
-
-### 3. Thêm logo
-
-Đặt logo vào `dist/ten-chien-dich/assets/logo.png`
-
-### 4. Thiết lập Google Apps Script
-
-Copy file `gas/Code.gs` vào Google Apps Script project mới và cấu hình:
-- Tạo Google Sheet để lưu dữ liệu
-- Cập nhật `SPREADSHEET_ID` trong `Code.gs`
-- Cập nhật `COLUMN_ORDER` nếu có custom fields
-- Deploy và lấy URL để cập nhật vào `campaign.json` → `config.scriptUrl`
-
-### 5. Xem dữ liệu đã submit
-
-Tất cả dữ liệu đã submit được lưu tại Google Sheet:
-📊 [Xem dữ liệu đã submit](https://docs.google.com/spreadsheets/d/1bMZkWsOg2FkNzO0ZG3TBx4W2hn9kVtBAy487WtcwKlc/edit?gid=261087324#gid=261087324)
+Đáp án hiện được gom trong `src/api/submit-answers.ts`. Hàm này chưa gọi mạng. Khi backend thêm operation vào `swagger-spec.json`, chạy `pnpm generate:api` và gọi hàm sinh ra từ file đó.
 
 ## ⚠️ CẢNH BÁO QUAN TRỌNG
 
 ### Không được sửa đổi fields hệ thống
 
-**Trong `campaign.json` → `fields.mandatory`:**
+**Trong `dummy-config.ts` → `fields.mandatory`:**
 - ❌ **KHÔNG được**: Xóa, thêm, hoặc thay đổi `id` của các trường hệ thống (bắt buộc và không bắt buộc)
 - ❌ **KHÔNG được**: Đổi `type`, `required`, `source` của các trường hệ thống
-- ✅ **Được phép**: Thay đổi `label`, `placeholder` (để tùy chỉnh hiển thị)
+- ✅ **Được phép**: Thay đổi `label`, `placeholder`, và `visible`
+
+`visible: false` ẩn field đó trên form công khai và bỏ qua khi kiểm tra bắt buộc. `full_name` luôn hiện và luôn bắt buộc, kể cả khi `visible` là `false`. Cờ vẫn có trong JSON để UI Admin dùng chung schema. Tỉnh, huyện, xã nên bật hoặc tắt cùng nhau vì cấp sau chỉ tải sau khi chọn cấp trước.
 
 **Các trường bắt buộc:**
 - `full_name` - Họ và tên
@@ -128,26 +79,6 @@ Tất cả dữ liệu đã submit được lưu tại Google Sheet:
 **Các trường không bắt buộc nhưng không được sửa đổi:**
 - `street` - Đường (không bắt buộc)
 - `house_number` - Số nhà (không bắt buộc)
-
-**Trong `Code.gs` → `COLUMN_ORDER`:**
-- ❌ **KHÔNG được**: Xóa hoặc thay đổi thứ tự các cột bắt buộc
-- ⚠️ **BẮT BUỘC**: Tất cả custom fields trong `campaign.json` phải được khai báo ở đây
-
-**Các cột bắt buộc** (phải giữ nguyên thứ tự):
-1. `submitted_at` - Thời gian submit
-2. `campaign_id` - ID chiến dịch
-3. `full_name` - Họ và tên
-4. `phone` - Số điện thoại
-5. `province` - Tỉnh/Thành phố
-6. `district` - Huyện/Thị xã
-7. `ward` - Xã/Phường
-8. `hamlet` - Thôn/Ấp
-9. `street` - Đường (không bắt buộc)
-10. `house_number` - Số nhà (không bắt buộc)
-11. `referral` - Referrer URL
-12. `device` - Thông tin thiết bị
-13. `ip_address` - Địa chỉ IP
-14. `zalo_link` - Link Zalo group
 
 ## 📝 Thêm Custom Fields
 
@@ -230,15 +161,13 @@ Cấu trúc: `fields.custom` là **array** các section, mỗi section có `titl
 - Radio: Chỉ cho phép chọn một option
 
 **⚠️ QUAN TRỌNG:**
-- Sau khi thêm custom fields vào `campaign.json`, **bắt buộc** phải thêm các field ID vào `COLUMN_ORDER` trong `Code.gs`
-- Thứ tự trong `COLUMN_ORDER` = thứ tự cột trong Google Sheet
-- Tất cả các cột trong `COLUMN_ORDER` phải được tạo sẵn trên Sheet với ID tương ứng
+- Field id trong `dummy-config.ts` là key trong object đáp án gửi lên backend
 
 ## 🔧 Cấu hình Zalo và Call for Action
 
 ### Bật/tắt Zalo Card
 
-Card Zalo sẽ hiển thị sau khi người dùng submit form thành công. Cấu hình trong `campaign.json`:
+Card Zalo sẽ hiển thị sau khi người dùng submit form thành công. Cấu hình trong `dummy-config.ts`:
 
 ```json
 "config": {
@@ -258,7 +187,7 @@ Card Zalo sẽ hiển thị sau khi người dùng submit form thành công. C�
 
 ### Bật/tắt Call for Action Card (Kêu gọi hành động)
 
-Card Call for Action hiển thị thông điệp kêu gọi người dùng liên hệ hoặc thực hiện hành động. Cấu hình trong `campaign.json`:
+Card Call for Action hiển thị thông điệp kêu gọi người dùng liên hệ hoặc thực hiện hành động. Cấu hình trong `dummy-config.ts`:
 
 ```json
 "config": {

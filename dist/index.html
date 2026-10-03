@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nông Dân Phát – Webform Campaign</title>
+    <link rel="icon" type="image/x-icon" href="/shared/img/favicon.ico" />
+
+    <!-- Inter Font -->
+    <link rel="stylesheet" href="/shared/fonts/inter-fonts.css" />
+
+    <style>
+      :root {
+        --bg: #f3f4f6;
+        --card: #fff;
+        --primary: #ab7e31;
+        --danger: #ed3241;
+        --muted: #6b7280;
+        --radius: 16px;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: #0f172a;
+      }
+      /* Header – UI từ ndp-website/header.html */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        width: 100%;
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      body {
+        padding-top: 4.5rem;
+      }
+      header .header-ndp-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      header .header-ndp-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        min-height: 4rem;
+        padding: 0.75rem 0;
+        gap: 0.5rem 1.5rem;
+        position: relative;
+      }
+      header .header-ndp-logo {
+        display: none;
+        position: absolute;
+        left: 0;
+      }
+      @media (min-width: 1024px) {
+        header .header-ndp-logo {
+          display: block;
+        }
+      }
+      header .header-ndp-logo a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      header .header-ndp-logo img {
+        height: 4rem;
+        width: auto;
+        object-fit: contain;
+      }
+      header .header-ndp-menu {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        width: 100%;
+      }
+      @media (min-width: 1024px) {
+        header .header-ndp-menu {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          gap: 0.5rem 2.5rem;
+          width: auto;
+          margin-right: 1rem;
+        }
+      }
+      header .header-ndp-menu a {
+        border-radius: 9999px;
+        background: #f3f4f6;
+        padding: 0.5rem 0.5rem;
+        text-align: center;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #374151;
+        text-decoration: none;
+        transition: background-color 0.2s, color 0.2s;
+      }
+      header .header-ndp-menu a:hover {
+        background: #e5e7eb;
+        color: #ab7e31;
+      }
+      @media (min-width: 1024px) {
+        header .header-ndp-menu a {
+          border-radius: 0;
+          background: transparent;
+          padding: 0;
+          font-size: 1rem;
+          font-weight: 400;
+        }
+        header .header-ndp-menu a:hover {
+          background: transparent;
+          color: #ab7e31;
+        }
+      }
+      .page {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 1rem 1rem 3rem;
+      }
+      @media (max-width: 1024px) {
+        .page {
+          margin-top: 2rem;
+        }
+      }
+      .hero {
+        margin: 1rem 0;
+        border-radius: 20px; /* Default, sẽ được override bởi config */
+        overflow: hidden;
+      }
+      .hero-banner-img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+      }
+      .hero-info-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin: 1rem 0;
+        box-shadow: var(--shadow);
+      }
+      .hero-title {
+        font-weight: 600;
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+        color: #0f172a;
+      }
+      .hero-desc {
+        color: var(--muted);
+        line-height: 1.6;
+        font-size: 1.1rem;
+        margin: 0;
+      }
+      .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 1.25rem;
+        margin-top: 1rem;
+      }
+      .form-title {
+        font-weight: 600;
+        margin: 1rem 0;
+        font-size: 1.3rem;
+      }
+      .form-title:first-child {
+        margin-top: 0;
+      }
+      #resultTitle {
+        text-align: center;
+      }
+      .field {
+        margin-bottom: 0.75rem;
+      }
+      .field label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+      }
+      .field-error {
+        display: none;
+        color: var(--danger);
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+        font-weight: 500;
+      }
+      .field.error .field-error {
+        display: block;
+      }
+      .field label.required::after {
+        content: " *";
+        color: var(--danger);
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.55rem 0.6rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        outline: 0;
+        transition: all 0.2s;
+        background: #fff;
+        font-family: inherit;
+      }
+      /* Checkbox and Radio */
+      .field-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+      }
+      .field-option {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        cursor: pointer;
+      }
+      .field-option input[type="checkbox"],
+      .field-option input[type="radio"] {
+        width: auto;
+        margin: 0;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #cbd5e1;
+        border-radius: 4px;
+        position: relative;
+        transition: all 0.2s;
+        flex-shrink: 0;
+        box-sizing: border-box;
+      }
+      .field-option input[type="radio"] {
+        border-radius: 50%;
+        width: 1.4rem;
+        height: 1.4rem;
+        min-width: 1.4rem;
+        min-height: 1.4rem;
+      }
+      .field-option input[type="checkbox"]:checked,
+      .field-option input[type="radio"]:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+      }
+      .field-option input[type="checkbox"]:checked::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+        width: 5px;
+        height: 10px;
+        border: solid #fff;
+        border-width: 0 2.5px 2.5px 0;
+        box-sizing: border-box;
+      }
+      .field-option input[type="radio"]:checked::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        background-color: #fff;
+        border-radius: 50%;
+      }
+      .field-option input[type="checkbox"]:focus,
+      .field-option input[type="radio"]:focus {
+        box-shadow: 0 0 0 3px rgba(171, 126, 49, 0.12);
+        outline: none;
+      }
+      .field-option input[type="checkbox"].error,
+      .field-option input[type="radio"].error {
+        border-color: var(--danger);
+      }
+      .field-option label {
+        cursor: pointer;
+        font-weight: normal;
+        color: #0f172a;
+        margin: 0;
+        flex: 1;
+      }
+      /* Không apply error cho option labels - chỉ label chính mới đỏ */
+      /* CSS riêng cho checkbox/radio field */
+      .field-checkbox-radio {
+        margin-bottom: 1.5rem;
+      }
+      .checkbox-hint {
+        font-style: italic;
+        font-weight: normal;
+      }
+      /* CSS riêng cho label chính của checkbox/radio khi có error - DÙNG !important để override */
+      .field-checkbox-radio.error > label:first-of-type,
+      .field-checkbox-radio.error label:first-of-type,
+      .field-checkbox-radio label:first-of-type.error-label,
+      .field-checkbox-radio > label.error-label {
+        color: var(--danger) !important;
+        font-weight: 600 !important;
+      }
+      .field-checkbox-radio.error .field-error {
+        display: block !important;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      /* Custom Dropdown */
+      .custom-dropdown {
+        position: relative;
+        width: 100%;
+      }
+      .custom-dropdown-button {
+        width: 100%;
+        padding: 0.55rem 2.5rem 0.55rem 0.6rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        outline: 0;
+        transition: all 0.2s;
+        background: #fff;
+        font-family: inherit;
+        cursor: pointer;
+        text-align: left;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .custom-dropdown-button:hover {
+        border-color: var(--primary);
+      }
+      .custom-dropdown.disabled .custom-dropdown-button,
+      .custom-dropdown.disabled .custom-dropdown-button:hover {
+        background: #f3f4f6;
+        color: #9ca3af;
+        border-color: #e5e7eb;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+      .custom-dropdown-button:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(171, 126, 49, 0.12);
+      }
+      .custom-dropdown-button.error {
+        border-color: var(--danger);
+        background: #fee2e2;
+      }
+      .custom-dropdown-button .dropdown-text {
+        flex: 1;
+        color: #0f172a;
+        font-weight: normal;
+      }
+      .custom-dropdown-button .dropdown-text.placeholder {
+        color: #9ca3af;
+      }
+      .custom-dropdown-button .dropdown-arrow {
+        width: 12px;
+        height: 12px;
+        transition: transform 0.2s;
+        flex-shrink: 0;
+        margin-right: -1.75rem;
+      }
+      .custom-dropdown.open .custom-dropdown-button .dropdown-arrow {
+        transform: rotate(180deg);
+      }
+      .custom-dropdown-panel {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        max-height: 250px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+        border: none;
+      }
+      .custom-dropdown.open .custom-dropdown-panel {
+        display: block;
+      }
+      /* Administrative dropdown với search */
+      .admin-dropdown-panel {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        max-height: 300px;
+        display: none;
+        border: none;
+        flex-direction: column;
+      }
+      .admin-dropdown.open .admin-dropdown-panel {
+        display: flex;
+      }
+      .admin-dropdown-search {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        padding: 0.75rem;
+        border-bottom: 1px solid #e2e8f0;
+        background: #fff;
+        border-radius: 12px 12px 0 0;
+        z-index: 1;
+      }
+      .admin-dropdown-search input {
+        width: 100%;
+        padding: 0.55rem 0.6rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        outline: 0;
+        transition: all 0.2s;
+        background: #fff;
+        font-family: inherit;
+      }
+      .admin-dropdown-search input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(171, 126, 49, 0.12);
+      }
+      .admin-dropdown-search input::placeholder {
+        color: #9ca3af;
+      }
+      .admin-dropdown-options {
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: calc(300px - 60px);
+      }
+      .admin-dropdown-option {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: all 0.15s;
+        color: #0f172a;
+        border: none;
+        background: transparent;
+        width: 100%;
+        text-align: left;
+        font-size: 0.95rem;
+        font-family: inherit;
+        font-weight: normal;
+        border-radius: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .admin-dropdown-option:hover {
+        background-color: var(--primary);
+        color: #fff;
+      }
+      .admin-dropdown-option.selected {
+        background-color: rgba(171, 126, 49, 0.1);
+        color: var(--primary);
+        font-weight: normal;
+      }
+      .admin-dropdown-option.selected:hover {
+        background-color: var(--primary);
+        color: #fff;
+      }
+      .admin-dropdown-option[style*="display: none"] {
+        display: none !important;
+      }
+      .custom-dropdown-option {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: all 0.15s;
+        color: #0f172a;
+        border: none;
+        background: transparent;
+        width: calc(100% - 8px);
+        text-align: left;
+        font-size: 0.95rem;
+        font-family: inherit;
+        font-weight: normal;
+        border-radius: 0.75rem;
+        margin: 2px 4px;
+        box-sizing: border-box;
+      }
+      .custom-dropdown-option:first-child {
+        margin-top: 4px;
+      }
+      .custom-dropdown-option:last-child {
+        margin-bottom: 4px;
+      }
+      .custom-dropdown-option:hover {
+        background-color: var(--primary);
+        color: #fff;
+      }
+      .custom-dropdown-option.selected {
+        background-color: rgba(171, 126, 49, 0.1);
+        color: var(--primary);
+        font-weight: normal;
+      }
+      .custom-dropdown-option.selected:hover {
+        background-color: var(--primary);
+        color: #fff;
+      }
+      input:focus,
+      textarea:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(171, 126, 49, 0.12);
+      }
+      input.error,
+      textarea.error {
+        border-color: var(--danger);
+        background: #fee2e2;
+      }
+      label.error-label {
+        color: var(--danger);
+        font-weight: 600;
+      }
+      button {
+        background: var(--primary);
+        color: #fff;
+        border: 0;
+        border-radius: 0.75rem;
+        padding: 0.65rem 1rem;
+        font-weight: 700;
+        width: 100%;
+        cursor: pointer;
+        transition: filter 0.2s;
+        font-size: 1rem;
+      }
+      button:hover:not(:disabled) {
+        filter: brightness(0.95);
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .muted {
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+      .status {
+        margin-top: 0.6rem;
+        font-size: 0.9rem;
+        min-height: 1.25rem;
+      }
+      .copyright {
+        text-align: center;
+        color: #64748b;
+        font-size: 0.85rem;
+        padding: 1rem 1rem;
+      }
+      .legal-notice {
+        text-align: center;
+        color: #9ca3af;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        margin-top: 2rem;
+      }
+      .spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.45);
+        border-top-color: #fff;
+        border-radius: 999px;
+        display: inline-block;
+        animation: spin 0.6s linear infinite;
+        margin-right: 0.35rem;
+        vertical-align: -2px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+      @media (max-width: 640px) {
+        .row {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+      }
+      ul.clean {
+        margin: 0.25rem 0 0;
+        padding-left: 0;
+        list-style: none;
+      }
+      ul.clean li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+      }
+      ul.clean li:last-child {
+        margin-bottom: 0;
+      }
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--muted);
+      }
+      .error-message {
+        background: #fee2e2;
+        color: var(--danger);
+        padding: 1rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+      }
+      .consent-checkbox-container {
+        margin-bottom: 1.5rem;
+      }
+      .consent-checkbox-label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        cursor: pointer;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: #374151;
+      }
+      .consent-checkbox-input {
+        width: 18px;
+        height: 18px;
+        margin-top: 0.2rem;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        border: 2px solid #cbd5e1;
+        border-radius: 4px;
+        position: relative;
+        transition: all 0.2s;
+        flex-shrink: 0;
+        box-sizing: border-box;
+      }
+      .consent-checkbox-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+      }
+      .consent-checkbox-input:checked::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+        width: 5px;
+        height: 10px;
+        border: solid #fff;
+        border-width: 0 2.5px 2.5px 0;
+        box-sizing: border-box;
+      }
+      .consent-checkbox-input:focus {
+        box-shadow: 0 0 0 3px rgba(171, 126, 49, 0.12);
+        outline: none;
+      }
+      .consent-checkbox-text {
+        flex: 1;
+      }
+      .brand-name {
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .privacy-link {
+        color: var(--primary);
+        text-decoration: underline;
+        transition: opacity 0.2s;
+      }
+      .privacy-link:hover {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header – UI từ ndp-website/header.html -->
+    <header>
+      <nav class="header-ndp-container">
+        <div class="header-ndp-inner">
+          <!-- Logo – ẩn < 1024px, hiện từ 1024px trở lên -->
+          <div class="header-ndp-logo">
+            <a href="https://ndphat.vn/">
+              <img src="/shared/img/logo.png" alt="Nông Dân Phát" />
+            </a>
+          </div>
+
+          <!-- Menu items – < 1024px: grid 3 cột; ≥ 1024px: inline -->
+          <div class="header-ndp-menu">
+            <a href="https://ndphat.vn/">Trang chủ</a>
+            <a href="https://ndphat.vn/insights/">Chia sẻ</a>
+            <a href="https://ndphat.vn/campaigns/">Chiến dịch</a>
+            <a href="https://ndphat.vn/join-us/">Tuyển dụng</a>
+            <a href="https://ndphat.vn/contact/">Liên hệ</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="page">
+      <div id="loadingMessage" class="loading">Đang tải biểu mẫu...</div>
+
+      <div id="errorMessage" class="error-message" style="display: none"></div>
+
+      <div id="campaignContent" style="display: none">
+        <div class="hero" id="campaignHero">
+          <img
+            class="hero-banner-img"
+            id="campaignBannerImg"
+            src="/shared/img/background.png"
+            alt="Banner"
+          />
+        </div>
+
+        <!-- Hero Info Card -->
+        <div class="hero-info-card" id="heroInfoCard" style="display: none">
+          <div class="hero-title" id="campaignTitle"></div>
+          <p class="hero-desc" id="campaignDesc"></p>
+        </div>
+
+        <!-- FORM CARD -->
+        <div class="card" id="formCard">
+          <div id="formFields"></div>
+        </div>
+
+        <!-- CUSTOM FIELDS CARDS (sẽ được tạo động) -->
+        <div id="customFieldsCards"></div>
+
+        <!-- SUBMIT SECTION (luôn ở cuối) -->
+        <div class="card" id="submitCard">
+          <!-- Consent Checkbox -->
+          <div class="consent-checkbox-container">
+            <label class="consent-checkbox-label">
+              <input type="checkbox" id="consentCheckbox" class="consent-checkbox-input" />
+              <span class="consent-checkbox-text">
+                Tôi đồng ý cho <span class="brand-name">Nông Dân Phát</span> thu thập và sử dụng thông tin tôi cung cấp để liên hệ tư vấn và cung cấp thông tin liên quan, theo <a href="https://ndphat.vn/chinh-sach-bao-mat" target="_blank" rel="noopener noreferrer" class="privacy-link">Chính sách bảo mật</a>.
+                <br />
+                Thông tin bạn cung cấp giúp <span class="brand-name">Nông Dân Phát</span> hiểu nhu cầu và liên hệ lại khi cần thiết.
+                <br />
+                Việc gửi thông tin không làm phát sinh bất kỳ nghĩa vụ hay giao dịch nào.
+              </span>
+            </label>
+          </div>
+          
+          <button id="submitBtn" disabled>
+            <span id="submitText">Gửi thông tin</span>
+          </button>
+          
+          <div id="status" class="status"></div>
+        </div>
+
+        <!-- RESULT CARD -->
+        <div class="card" id="resultCard" style="display: none">
+          <div class="form-title" id="resultTitle"></div>
+          <div id="receipt" class="muted"></div>
+          <button id="newSubmitBtn" style="margin-top: 2rem">
+            Gửi thông tin khác
+          </button>
+        </div>
+
+        <!-- ZALO LINK CARD -->
+        <div class="card" id="zaloCard" style="display: none">
+          <div class="form-title" id="zaloTitle"></div>
+          <div
+            id="zaloDescription"
+            class="muted"
+            style="margin-bottom: 1rem"
+          ></div>
+          <div id="zaloLink" class="muted"></div>
+        </div>
+
+        <!-- CALL FOR ACTION CARD -->
+        <div class="card" id="callForActionCard" style="display: none">
+          <div class="form-title" id="callForActionTitle"></div>
+          <div
+            id="callForActionDescription"
+            class="muted"
+            style="margin-bottom: 1rem"
+          ></div>
+          <div id="callForActionLink" class="muted"></div>
+        </div>
+
+        <!-- LEGAL NOTICE -->
+        <p class="legal-notice">
+          Website hoạt động theo quy định pháp luật Việt Nam.
+        </p>
+
+        <!-- COPYRIGHT -->
+        <div id="copyright" class="copyright"></div>
+      </div>
+    </div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

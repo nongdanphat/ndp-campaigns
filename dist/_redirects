@@ -1,5 +1,3 @@
-# Cloudflare Pages redirects
-# Đảm bảo routing hoạt động đúng
-
-/thudong2025/* /thudong2025/index.html 200
-
+# /v1 đi tới backend. Path chiến dịch còn lại trả về shell.
+/v1/*  https://dev-api.ndphat.com/v1/:splat  200
+/*    /index.html   200
