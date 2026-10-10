@@ -6,131 +6,150 @@
     "zalo": {
       "enabled": true,
       "title": "Tham gia nhóm Zalo hỗ trợ nông dân",
-      "description": "Nhận thông báo mới, hướng dẫn kỹ thuật và trao đổi trực tiếp với cán bộ hỗ trợ.",
-      "link": "https://zalo.me/g/zox0u8849l"
+      "description": "<p>Nhận&nbsp;thông&nbsp;báo&nbsp;mới,&nbsp;hướng&nbsp;dẫn&nbsp;kỹ&nbsp;thuật&nbsp;và&nbsp;trao&nbsp;đổi&nbsp;trực&nbsp;tiếp&nbsp;với&nbsp;cán&nbsp;bộ&nbsp;hỗ&nbsp;trợ.</p>",
+      "link": "https://zalo.me/g/zox0u8849l",
+      "linkBySenderArea": false
     },
     "callForAction": {
       "enabled": true,
       "title": "Nhiều chương trình hỗ trợ khác đang được chuẩn bị",
-      "description": "Trong thời gian tới, Nông Dân Phát sẽ triển khai thêm nhiều chiến dịch và chương trình hỗ trợ nông dân trên nhiều lĩnh vực khác nhau như ứng dụng công nghệ, canh tác bền vững, đào tạo kỹ thuật và kết nối tiêu thụ sản phẩm.",
+      "description": "<p>Trong&nbsp;thời&nbsp;gian&nbsp;tới,&nbsp;Nông&nbsp;Dân&nbsp;Phát&nbsp;sẽ&nbsp;triển&nbsp;khai&nbsp;thêm&nbsp;nhiều&nbsp;chiến&nbsp;dịch&nbsp;và&nbsp;chương&nbsp;trình&nbsp;hỗ&nbsp;trợ&nbsp;nông&nbsp;dân&nbsp;trên&nbsp;nhiều&nbsp;lĩnh&nbsp;vực&nbsp;khác&nbsp;nhau&nbsp;như&nbsp;ứng&nbsp;dụng&nbsp;công&nbsp;nghệ,&nbsp;canh&nbsp;tác&nbsp;bền&nbsp;vững,&nbsp;đào&nbsp;tạo&nbsp;kỹ&nbsp;thuật&nbsp;và&nbsp;kết&nbsp;nối&nbsp;tiêu&nbsp;thụ&nbsp;sản&nbsp;phẩm.</p>",
       "link": "https://zalo.me/g/zox0u8849l"
+    },
+    "submitError": {
+      "title": "Chưa gửi được thông tin",
+      "description": "<p>Bạn&nbsp;vui&nbsp;lòng&nbsp;gửi&nbsp;lại</p>"
     }
   },
   "metadata": {
-    "submitButtonText": "Gửi thông tin",
-    "newSubmitButtonText": "Gửi thông tin khác",
+    "heroTitle": "Thử chiến dịch 1",
+    "description": "Mô tả Thử chiến dịch 1",
+    "submitButtonText": "Gửi ngay",
+    "newSubmitButtonText": "Gửi thêm",
     "disabledMessage": "Chiến dịch này hiện đang tắt.",
-    "startDate": "01/11/2026",
+    "startDate": "1/1/2026",
     "endDate": "31/12/2026",
-    "resultTitle": "Đã gửi thông tin thành công",
-    "heroTitle": "Thanh long 1",
-    "description": "Mô tả thanh long 1"
+    "resultTitle": "Đã gửi thành công"
   },
   "theme": {
-    "primaryColor": "#26690F",
+    "primaryColor": "#008900",
     "backgroundColor": "#f3f4f6",
     "warningColor": "#ED3241",
     "cardBorderRadius": "0px",
-    "heroBorderRadius": "10px"
+    "heroBorderRadius": "0px"
   },
   "fields": {
     "mandatory": {
-      "full_name": {
-        "label": "Họ và tên",
-        "type": "text",
-        "placeholder": "VD: Nguyễn Văn A",
+      "ward": {
+        "label": "Xã / Phường / Thị trấn",
+        "type": "select",
         "required": true,
-        "visible": true
+        "visible": true,
+        "source": "administrative"
       },
       "phone": {
         "label": "Số điện thoại",
         "type": "tel",
+        "required": true,
         "placeholder": "VD: 0912 345 678",
-        "required": true,
         "visible": true
-      },
-      "province": {
-        "label": "Tỉnh / Thành phố",
-        "type": "select",
-        "source": "administrative",
-        "required": true,
-        "visible": true
-      },
-      "district": {
-        "label": "Huyện / Thị xã / TP trực thuộc",
-        "type": "select",
-        "source": "administrative",
-        "required": true,
-        "visible": true
-      },
-      "ward": {
-        "label": "Xã / Phường / Thị trấn",
-        "type": "select",
-        "source": "administrative",
-        "required": true,
-        "visible": false
       },
       "hamlet": {
         "label": "Thôn / Ấp / Tổ dân phố",
         "type": "text",
-        "placeholder": "VD: Thôn A / Ấp B / Tổ 5 KP 3",
         "required": true,
+        "placeholder": "VD: Thôn A / Ấp B / Tổ 5 KP 3",
         "visible": false
       },
       "street": {
         "label": "Đường",
         "type": "text",
-        "placeholder": "Tên đường (Nếu có)",
         "required": false,
+        "placeholder": "Tên đường (Nếu có)",
         "visible": false
+      },
+      "district": {
+        "label": "Huyện / Thị xã / TP trực thuộc",
+        "type": "select",
+        "required": true,
+        "visible": true,
+        "source": "administrative"
+      },
+      "province": {
+        "label": "Tỉnh / Thành phố",
+        "type": "select",
+        "required": true,
+        "visible": true,
+        "source": "administrative"
+      },
+      "full_name": {
+        "label": "Họ và tên",
+        "type": "text",
+        "required": true,
+        "placeholder": "VD: Nguyễn Văn A",
+        "visible": true
       },
       "house_number": {
         "label": "Số nhà",
         "type": "text",
-        "placeholder": "Số nhà (Nếu có)",
         "required": false,
+        "placeholder": "Số nhà (Nếu có)",
         "visible": false
       }
     },
     "custom": [
       {
-        "title": "Câu hỏi thêm",
+        "title": "Câu hỏi tuỳ chỉnh thử nghiệm",
         "fields": [
           {
-            "id": "field_4b6bc3b8",
-            "label": "Bạn viết gì đi",
+            "label": "Câu hỏi văn bản",
             "type": "text",
-            "placeholder": "Viết đi",
-            "required": true
+            "required": true,
+            "placeholder": "Nhập văn bản",
+            "id": "field_831abfb5"
           },
           {
-            "id": "field_29b18504",
-            "label": "Chọn 1",
-            "type": "radio",
+            "label": "Câu hỏi SĐT",
+            "type": "tel",
             "required": false,
-            "options": ["Một", "Hai"]
+            "placeholder": "Nhập SĐT",
+            "id": "field_ac3ce6ee"
           },
           {
-            "id": "field_0edb8ec8",
-            "label": "Chọn nhiều",
+            "label": "Câu hỏi nhập số",
+            "type": "number",
+            "required": true,
+            "placeholder": "Hãy nhập số",
+            "id": "field_094c5f75"
+          },
+          {
+            "label": "Câu hỏi danh sách chọn",
+            "type": "select",
+            "required": true,
+            "options": ["Lựa chọn 1", "Lựa chọn 2", "Lựa chọn 3"],
+            "id": "field_f6ff4a45"
+          },
+          {
+            "label": "Câu hỏi chọn nhiều",
             "type": "checkbox",
             "required": false,
-            "options": ["Chọn a", "Chọn b"]
+            "options": ["Chọn nhiều 1", "Chọn nhiều 2", "Chọn nhiều 3"],
+            "id": "field_8cbab011"
           },
           {
-            "id": "field_a850d8bb",
-            "label": "Số nào",
-            "type": "number",
-            "required": false,
-            "placeholder": "1 số"
+            "label": "Câu hỏi chọn 1",
+            "type": "radio",
+            "required": true,
+            "options": ["Chọn 1A", "Chọn 1B", "Chọn 1C"],
+            "id": "field_1cb37627"
           },
           {
-            "id": "field_d2e43fc4",
-            "label": "Nhập text nhiều",
+            "label": "Câu hỏi nhập văn bản dài",
             "type": "textarea",
             "required": false,
-            "placeholder": "nhiều ...",
-            "rows": 4
+            "placeholder": "Nhập đoạn dài",
+            "rows": 4,
+            "id": "field_eb19cafd"
           }
         ]
       }

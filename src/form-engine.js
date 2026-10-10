@@ -7,6 +7,7 @@
       let loadDistricts = async () => [];
       let loadWards = async () => [];
       let submitAnswers = async () => ({ success: true });
+      let lastSubmitPayload = null;
 
       // ======= UTILITIES =======
       const $ = (id) => document.getElementById(id);
@@ -469,6 +470,95 @@
         if (!field) return false;
         if (id === "full_name") return true;
         return field.visible !== false;
+      }
+
+      function setRichText(el, html) {
+        if (!el) return;
+        const template = document.createElement("template");
+        template.innerHTML = String(html || "");
+        template.content
+          .querySelectorAll("script, iframe, object, embed, link, style")
+          .forEach((node) => node.remove());
+        template.content.querySelectorAll("*").forEach((node) => {
+          [...node.attributes].forEach((attr) => {
+            const name = attr.name.toLowerCase();
+            if (name.startsWith("on") || name === "srcdoc") {
+              node.removeAttribute(attr.name);
+            }
+            if (
+              (name === "href" || name === "src") &&
+              /^\s*javascript:/i.test(attr.value)
+            ) {
+              node.removeAttribute(attr.name);
+            }
+          });
+        });
+        el.replaceChildren(template.content);
+      }
+
+      function showSubmitErrorDialog() {
+        const errorConfig = CAMPAIGN_CONFIG?.config?.submitError || {};
+        const titleEl = $("submitErrorTitle");
+        if (titleEl) {
+          titleEl.textContent = errorConfig.title || "Chưa gửi được thông tin";
+        }
+        setRichText(
+          $("submitErrorDescription"),
+          errorConfig.description || "<p>Bạn vui lòng gửi lại</p>"
+        );
+        const dialog = $("submitErrorDialog");
+        if (dialog) dialog.classList.add("open");
+        const retry = $("submitErrorRetry");
+        if (retry) {
+          retry.disabled = false;
+          retry.textContent = "Gửi lại";
+        }
+      }
+
+      function hideSubmitErrorDialog() {
+        const dialog = $("submitErrorDialog");
+        if (dialog) dialog.classList.remove("open");
+      }
+
+      function resetSubmitButton() {
+        const submitBtn = $("submitBtn");
+        const submitText = $("submitText");
+        const consentCheckbox = $("consentCheckbox");
+        if (submitBtn) submitBtn.disabled = !consentCheckbox?.checked;
+        if (submitText) {
+          submitText.textContent =
+            CAMPAIGN_CONFIG?.metadata?.submitButtonText || "Gửi thông tin";
+        }
+      }
+
+      async function sendSubmission(payload) {
+        if (isSubmitting) return;
+        isSubmitting = true;
+        const submitBtn = $("submitBtn");
+        const submitText = $("submitText");
+        if (submitBtn) submitBtn.disabled = true;
+        if (submitText) {
+          submitText.innerHTML = '<span class="spinner"></span> Đang gửi...';
+        }
+        setStatus("Đang gửi dữ liệu...");
+        try {
+          const result = await submitAnswers(payload);
+          if (result && result.success === false) {
+            throw new Error(result.message || "Đã có lỗi xảy ra. Vui lòng thử lại.");
+          }
+          hideSubmitErrorDialog();
+          setStatus("");
+          if (submitText) submitText.textContent = "Đã gửi ✔";
+          renderReceipt(payload, new Date().toISOString());
+          showResultCard();
+        } catch (err) {
+          console.error(err);
+          setStatus("");
+          resetSubmitButton();
+          showSubmitErrorDialog();
+        } finally {
+          isSubmitting = false;
+        }
       }
 
       function setStatus(msg, color = "#64748b") {
@@ -1485,9 +1575,11 @@
               zaloTitle.textContent = zaloConfig.title || "Tham gia nhóm Zalo";
             }
             if (zaloDescription) {
-              zaloDescription.textContent =
+              setRichText(
+                zaloDescription,
                 zaloConfig.description ||
-                "Vui lòng tham gia nhóm Zalo để nhận được hỗ trợ tốt nhất.";
+                  "<p>Vui lòng tham gia nhóm Zalo để nhận được hỗ trợ tốt nhất.</p>"
+              );
             }
             if (zaloLink) {
               // Chỉ hiển thị link nếu có trong config
@@ -1522,9 +1614,11 @@
                 callForActionConfig.title || "Liên hệ tư vấn";
             }
             if (callForActionDescription) {
-              callForActionDescription.textContent =
+              setRichText(
+                callForActionDescription,
                 callForActionConfig.description ||
-                "Vui lòng liên hệ để được tư vấn và hỗ trợ tốt nhất.";
+                  "<p>Vui lòng liên hệ để được tư vấn và hỗ trợ tốt nhất.</p>"
+              );
             }
             if (callForActionLink) {
               // Chỉ hiển thị link nếu có trong config
@@ -1916,6 +2010,15 @@
               CAMPAIGN_CONFIG.metadata.submitButtonText;
           }
 
+          const submitErrorRetry = $("submitErrorRetry");
+          if (submitErrorRetry) {
+            submitErrorRetry.addEventListener("click", () => {
+              if (!lastSubmitPayload) return;
+              hideSubmitErrorDialog();
+              sendSubmission(lastSubmitPayload);
+            });
+          }
+
           // Set result title from config
           const resultTitleEl = $("resultTitle");
           if (resultTitleEl) {
@@ -1946,45 +2049,10 @@
           return;
         }
 
-        isSubmitting = true;
-        const submitBtn = $("submitBtn");
-        const submitText = $("submitText");
-
-        if (submitBtn) submitBtn.disabled = true;
-        if (submitText)
-          submitText.innerHTML = '<span class="spinner"></span> Đang gửi...';
-
         const payload = collectFormData();
 
-        // Lấy IP address
         setStatus("Đang lấy thông tin...");
         payload.ip_address = await getUserIP();
-
-        try {
-          setStatus("Đang gửi dữ liệu...");
-          const result = await submitAnswers(payload);
-          if (result && result.success === false) {
-            setStatus(
-              result.message || "Đã có lỗi xảy ra. Vui lòng thử lại.",
-              "var(--danger)"
-            );
-            if (submitText) submitText.textContent = "Gửi lại";
-            if (submitBtn) submitBtn.disabled = false;
-            isSubmitting = false;
-            return;
-          }
-          setStatus("");
-          if (submitText) submitText.textContent = "Đã gửi ✔";
-          renderReceipt(payload, new Date().toISOString());
-          showResultCard();
-        } catch (err) {
-          console.error(err);
-          setStatus(
-            err?.message || "Đã có lỗi xảy ra. Vui lòng thử lại.",
-            "var(--danger)"
-          );
-          if (submitText) submitText.textContent = "Gửi lại";
-          if (submitBtn) submitBtn.disabled = false;
-          isSubmitting = false;
-        }
+        lastSubmitPayload = payload;
+        await sendSubmission(payload);
       }

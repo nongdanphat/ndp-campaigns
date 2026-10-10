@@ -30,6 +30,12 @@ export type CampaignLinkCard = {
   title?: string;
   description?: string;
   link?: string;
+  linkBySenderArea?: boolean;
+};
+
+export type CampaignSubmitError = {
+  title?: string;
+  description?: string;
 };
 
 export type CampaignSettings = {
@@ -38,6 +44,7 @@ export type CampaignSettings = {
   showDeviceInfo?: boolean;
   zalo?: CampaignLinkCard;
   callForAction?: CampaignLinkCard;
+  submitError?: CampaignSubmitError;
 };
 
 export type CampaignMetadata = {
