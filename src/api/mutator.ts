@@ -4,6 +4,16 @@
  */
 export const API_BASE_URL = "";
 
+function readErrorMessage(data: unknown, fallback: string): string {
+  if (!data || typeof data !== "object") return fallback || "Request failed";
+  const body = data as { message?: unknown; error?: { message?: unknown } };
+  if (typeof body.error?.message === "string" && body.error.message) {
+    return body.error.message;
+  }
+  if (typeof body.message === "string" && body.message) return body.message;
+  return fallback || "Request failed";
+}
+
 export async function apiFetch<T>(
   url: string,
   options: RequestInit = {}
@@ -31,11 +41,7 @@ export async function apiFetch<T>(
   }
 
   if (!response.ok) {
-    const message =
-      data && typeof data === "object" && "message" in data
-        ? String((data as { message?: string }).message)
-        : response.statusText;
-    throw new Error(message || "Request failed");
+    throw new Error(readErrorMessage(data, response.statusText));
   }
 
   return {

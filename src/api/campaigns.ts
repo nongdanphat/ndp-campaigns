@@ -1,14 +1,8 @@
 import dummyForm from "./dummy-campaigns.json";
+import { campaignsControllerGetCampaignById } from "./generated/campaigns/campaigns";
 import type { Campaign, CampaignFormConfig } from "../types/campaign";
-import { apiFetch } from "./mutator";
 
 const dummyData = dummyForm as CampaignFormConfig;
-
-type CampaignBody = {
-  success?: boolean;
-  message?: string;
-  data?: Campaign;
-};
 
 function isPreview(): boolean {
   return new URLSearchParams(window.location.search).get("preview") === "true";
@@ -20,7 +14,6 @@ function fallbackCampaign(campaignId: string): Campaign {
     createdAt: "",
     updatedAt: "",
     enabled: true,
-    answerQuantity: 0,
     data: dummyData,
   };
 }
@@ -34,14 +27,18 @@ function allowPreview(campaign: Campaign): Campaign {
 
 export async function getCampaignConfig(campaignId: string): Promise<Campaign> {
   try {
-    const response = await apiFetch<{ data: CampaignBody }>(
-      `/v1/campaigns/${encodeURIComponent(campaignId)}`
-    );
+    const response = await campaignsControllerGetCampaignById(campaignId);
     const body = response.data;
-    if (!body?.success || !body.data) {
-      throw new Error(body?.message || "Không tải được chiến dịch");
+    if (!body.success || !body.data) {
+      throw new Error(body.message || "Không tải được chiến dịch");
     }
-    return allowPreview(body.data);
+    return allowPreview({
+      id: body.data.id,
+      createdAt: body.data.createdAt,
+      updatedAt: body.data.updatedAt,
+      enabled: body.data.enabled,
+      data: body.data.data as CampaignFormConfig,
+    });
   } catch {
     return allowPreview(fallbackCampaign(campaignId));
   }

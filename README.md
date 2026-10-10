@@ -53,11 +53,11 @@ ndp-campaigns/
 
 ## 🚀 Tạo chiến dịch mới
 
-`src/api/dummy-campaigns.json` chỉ là phần `data` mà app admin gửi BE: `config`, `metadata`, `theme`, `fields`. App form gọi `GET /v1/campaigns/{id}`. API lỗi thì dùng file này cho mọi id trên URL. `id`, `createdAt`, `updatedAt`, `enabled`, `answerQuantity` do BE trả, không ghi trong file. Type nằm ở `src/types/campaign.ts`.
+`src/api/dummy-campaigns.json` chỉ là phần `data` mà app admin gửi BE: `config`, `metadata`, `theme`, `fields`. App form gọi `GET /v1/campaigns/{id}`. API lỗi thì dùng file này cho mọi id trên URL. `id`, `createdAt`, `updatedAt`, `enabled` do BE trả, không ghi trong file. Type nằm ở `src/types/campaign.ts`.
 
 Sửa `metadata`, `theme`, `fields.custom`, card Zalo và call for action trong object đó, rồi chạy `pnpm build`. Mọi form dùng chung ảnh `dist/shared/img/background.png`.
 
-Đáp án hiện được gom trong `src/api/submit-answers.ts`. Hàm này chưa gọi mạng. Khi backend thêm operation vào `swagger-spec.json`, chạy `pnpm generate:api` và gọi hàm sinh ra từ file đó.
+Đáp án gửi `POST /v1/campaigns/{id}/answers` với body `{ "data": { ...câu trả lời } }`. Client nằm trong `src/api/submit-answers.ts`, gọi hàm Orval sinh từ `swagger-spec.json`.
 
 ## ⚠️ CẢNH BÁO QUAN TRỌNG
 

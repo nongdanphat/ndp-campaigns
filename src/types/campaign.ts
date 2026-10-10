@@ -74,12 +74,11 @@ export type CampaignFormConfig = {
   fields: CampaignFields;
 };
 
-/** Bản ghi chiến dịch do BE trả về khi GET. */
+/** Bản ghi chiến dịch do GET /v1/campaigns/{id} trả về. */
 export type Campaign = {
   id: string;
   createdAt: string;
   updatedAt: string;
   enabled: boolean;
-  answerQuantity: number;
   data: CampaignFormConfig;
 };
